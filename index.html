@@ -1,535 +1,223 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>QuizHack Arena — Educational Cyber Challenge</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>QuizHack Arena v10 — 7 Player Rooms — — Educational Cyber Challenge</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root{
-  --bg:#05091a; --panel:#0b1129; --panel2:#101936; --line:#26345c;
-  --cyan:#62e8ff; --pink:#ff5ccf; --green:#65f0a7; --yellow:#ffd76a;
-  --text:#eef4ff; --muted:#8490b0; --danger:#ff6b8a;
-}
-*{box-sizing:border-box} body{margin:0;font-family:Inter,system-ui,Segoe UI,Arial,sans-serif;background:
-radial-gradient(circle at 20% 15%,#15245a 0,transparent 28%),radial-gradient(circle at 75% 30%,#27134c 0,transparent 25%),#05091a;color:var(--text);min-height:100vh}
-button,input{font:inherit} button{cursor:pointer}
-.app{display:grid;grid-template-columns:82px 1fr;min-height:100vh}
-.sidebar{border-right:1px solid #182447;background:#070d20;display:flex;flex-direction:column;align-items:center;padding:16px 8px;gap:10px}
-.logo{width:48px;height:48px;border:1px solid #2b477b;border-radius:14px;display:grid;place-items:center;color:var(--cyan);font-weight:900;box-shadow:0 0 22px #1be2ff22;margin-bottom:16px}
-.nav{width:100%;padding:11px 4px;border-radius:12px;border:1px solid transparent;background:transparent;color:var(--muted);font-size:11px}
-.nav span{display:block;font-size:20px;margin-bottom:5px}.nav.active,.nav:hover{color:var(--text);border-color:#315080;background:#102044}
-.main{padding:22px 26px;max-width:1500px;width:100%;margin:auto}
-.top{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:22px}
-.brand h1{font-size:25px;margin:0}.brand small{color:var(--muted)}
-.profile{display:flex;align-items:center;gap:12px}.avatar{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#1e4777,#9e45bc);border:2px solid #6ae7ff}
-.profile strong{display:block}.profile small{color:var(--muted)}
-.page{display:none}.page.active{display:block}
-.grid{display:grid;grid-template-columns:1.35fr .85fr;gap:18px}
-.card{background:linear-gradient(180deg,#0d1530e8,#080f25e8);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 14px 45px #0005}
-.hero{min-height:245px;position:relative;overflow:hidden;background:
-radial-gradient(circle at 30% 60%,#1a478e55 0 3%,transparent 18%),radial-gradient(circle at 70% 35%,#a835a744 0 3%,transparent 20%),linear-gradient(135deg,#0d1839,#080c20)}
-.hero:after{content:"";position:absolute;inset:-30%;background:repeating-radial-gradient(ellipse at center,transparent 0 45px,#31538a25 46px 47px);transform:rotate(-8deg)}
-.hero>*{position:relative;z-index:1}
-.eyebrow{color:var(--cyan);font-size:12px;letter-spacing:1.8px;text-transform:uppercase}.hero h2{font-size:32px;margin:8px 0}.hero p{max-width:620px;color:#b8c3df}
-.actions{display:flex;gap:10px;flex-wrap:wrap}.btn{border:1px solid #3d5687;background:#111e3f;color:var(--text);padding:10px 15px;border-radius:10px}.btn.primary{background:linear-gradient(90deg,#1c9fca,#8a4bd1);border:0}.btn.pink{background:#7d245e;border-color:#bd438f}.btn:disabled{opacity:.45;cursor:not-allowed}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px}.stat{background:#0b1430;border:1px solid #24385f;border-radius:12px;padding:13px}.stat b{font-size:22px}.stat small{display:block;color:var(--muted);margin-top:4px}
-.section-title{display:flex;justify-content:space-between;align-items:center;margin:22px 0 10px}.section-title h3{margin:0}.muted{color:var(--muted)}
-.market{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.coin{padding:13px;border:1px solid #26375e;border-radius:12px;background:#0a132b}.coin b{font-size:18px}.up{color:var(--green)}.down{color:var(--danger)}
-.list{display:grid;gap:9px}.row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px;border:1px solid #233457;background:#09122a;border-radius:11px}.rank{width:30px;text-align:center;color:var(--yellow);font-weight:800}
-.quiz{max-width:900px;margin:auto}.question{font-size:25px;line-height:1.35;margin:14px 0 20px}.answers{display:grid;grid-template-columns:1fr 1fr;gap:12px}.answer{text-align:left;padding:16px;border:1px solid #2d416b;border-radius:12px;background:#0a1430;color:var(--text)}.answer:hover{border-color:var(--cyan);transform:translateY(-1px)}.answer.correct{border-color:var(--green);background:#0b3328}.answer.wrong{border-color:var(--danger);background:#351329}.feedback{min-height:44px;margin-top:14px;padding:12px;border-radius:10px;background:#09132b;color:#b9c5df}
-.hack-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.target{border:1px solid #30436e;border-radius:13px;padding:14px;background:#0a132b}.target.selected{border-color:var(--pink);box-shadow:0 0 20px #ff5ccf20}.target h4{margin:0 0 5px}.shield{height:8px;background:#1d2947;border-radius:99px;overflow:hidden;margin:8px 0}.shield i{display:block;height:100%;background:linear-gradient(90deg,var(--cyan),var(--pink));width:80%}
-.packet{border:1px dashed #79568d;padding:15px;border-radius:12px;background:#170f29;margin-top:12px}.terminal{background:#03060e;border:1px solid #203251;border-radius:12px;padding:14px;color:#7df7bd;font:12px ui-monospace,monospace;min-height:145px;white-space:pre-wrap}
-.shop{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.item{padding:16px}.price{color:var(--yellow);font-weight:800}
-.table{width:100%;border-collapse:collapse}.table th,.table td{text-align:left;padding:12px;border-bottom:1px solid #203050}.table th{color:var(--muted);font-size:12px;text-transform:uppercase}
-.badge{display:inline-block;padding:4px 8px;border-radius:999px;background:#172648;color:var(--cyan);font-size:11px}.toast{position:fixed;right:22px;bottom:22px;background:#101d3c;border:1px solid #3b5a8e;padding:13px 16px;border-radius:11px;display:none;box-shadow:0 15px 40px #0008}
-input{background:#071127;color:var(--text);border:1px solid #2b416e;border-radius:9px;padding:10px;width:100%}
-@media(max-width:900px){.grid,.hack-grid{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.shop{grid-template-columns:1fr 1fr}}
-@media(max-width:650px){.app{grid-template-columns:1fr}.sidebar{position:sticky;top:0;z-index:10;flex-direction:row;overflow:auto;border-right:0;border-bottom:1px solid #182447}.logo{margin:0}.nav{min-width:68px}.main{padding:16px}.answers{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.market{grid-template-columns:1fr}}
+:root{--bg:#05091a;--panel:#0b1129;--panel2:#101936;--line:#26345c;--cyan:#62e8ff;--pink:#ff5ccf;--green:#65f0a7;--yellow:#ffd76a;--text:#eef4ff;--muted:#8490b0;--danger:#ff6b8a}*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,Segoe UI,Arial,sans-serif;background:radial-gradient(circle at 20% 15%,#15245a 0,transparent 28%),radial-gradient(circle at 75% 30%,#27134c 0,transparent 25%),#05091a;color:var(--text);min-height:100vh}button,input{font:inherit}button{cursor:pointer}.app{display:grid;grid-template-columns:82px 1fr;min-height:100vh}.sidebar{border-right:1px solid #182447;background:#070d20;display:flex;flex-direction:column;align-items:center;padding:16px 8px;gap:10px}.logo{width:48px;height:48px;border:1px solid #2b477b;border-radius:14px;display:grid;place-items:center;color:var(--cyan);font-weight:900;box-shadow:0 0 22px #1be2ff22;margin-bottom:16px}.nav{width:100%;padding:11px 4px;border-radius:12px;border:1px solid transparent;background:transparent;color:var(--muted);font-size:11px}.nav span{display:block;font-size:20px;margin-bottom:5px}.nav.active,.nav:hover{color:var(--text);border-color:#315080;background:#102044}.main{padding:22px 26px;max-width:1500px;width:100%;margin:auto}.top{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:22px}.brand h1{font-size:25px;margin:0}.brand small,.profile small{color:var(--muted)}.profile{display:flex;align-items:center;gap:12px}.avatar{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#1e4777,#9e45bc);border:2px solid #6ae7ff}.profile strong{display:block}.page{display:none}.page.active{display:block}.grid{display:grid;grid-template-columns:1.35fr .85fr;gap:18px}.card{background:linear-gradient(180deg,#0d1530e8,#080f25e8);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 14px 45px #0005}.hero{min-height:245px;position:relative;overflow:hidden;background:radial-gradient(circle at 30% 60%,#1a478e55 0 3%,transparent 18%),radial-gradient(circle at 70% 35%,#a835a744 0 3%,transparent 20%),linear-gradient(135deg,#0d1839,#080c20)}.hero:after{content:"";position:absolute;inset:-30%;background:repeating-radial-gradient(ellipse at center,transparent 0 45px,#31538a25 46px 47px);transform:rotate(-8deg)}.hero>*{position:relative;z-index:1}.eyebrow{color:var(--cyan);font-size:12px;letter-spacing:1.8px;text-transform:uppercase}.hero h2{font-size:32px;margin:8px 0}.hero p{max-width:620px;color:#b8c3df}.actions{display:flex;gap:10px;flex-wrap:wrap}.btn{border:1px solid #3d5687;background:#111e3f;color:var(--text);padding:10px 15px;border-radius:10px}.btn.primary{background:linear-gradient(90deg,#1c9fca,#8a4bd1);border:0}.btn.pink{background:#7d245e;border-color:#bd438f}.btn:disabled{opacity:.45;cursor:not-allowed}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px}.stat{background:#0b1430;border:1px solid #24385f;border-radius:12px;padding:13px}.stat b{font-size:22px}.stat small{display:block;color:var(--muted);margin-top:4px}.section-title{display:flex;justify-content:space-between;align-items:center;margin:22px 0 10px}.section-title h3{margin:0}.muted{color:var(--muted)}.market{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.coin{padding:13px;border:1px solid #26375e;border-radius:12px;background:#0a132b}.coin b{font-size:18px}.up{color:var(--green)}.down{color:var(--danger)}.list{display:grid;gap:9px}.row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px;border:1px solid #233457;background:#09122a;border-radius:11px}.question{font-size:25px;line-height:1.35;margin:14px 0 20px}.answers{display:grid;grid-template-columns:1fr 1fr;gap:12px}.answer{text-align:left;padding:16px;border:1px solid #2d416b;border-radius:12px;background:#0a1430;color:var(--text)}.answer:hover{border-color:var(--cyan);transform:translateY(-1px)}.answer.correct{border-color:var(--green);background:#0b3328}.answer.wrong{border-color:var(--danger);background:#351329}.feedback{min-height:44px;margin-top:14px;padding:12px;border-radius:10px;background:#09132b;color:#b9c5df}.hack-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.target{border:1px solid #30436e;border-radius:13px;padding:14px;background:#0a132b}.target.selected{border-color:var(--pink);box-shadow:0 0 20px #ff5ccf20}.shield{height:8px;background:#1d2947;border-radius:99px;overflow:hidden;margin:8px 0}.shield i{display:block;height:100%;background:linear-gradient(90deg,var(--cyan),var(--pink))}.packet{border:1px dashed #79568d;padding:15px;border-radius:12px;background:#170f29;margin-top:12px}.terminal{background:#03060e;border:1px solid #203251;border-radius:12px;padding:14px;color:#7df7bd;font:12px ui-monospace,monospace;min-height:145px;white-space:pre-wrap}.shop{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.table{width:100%;border-collapse:collapse}.table th,.table td{text-align:left;padding:12px;border-bottom:1px solid #203050}.table th{color:var(--muted);font-size:12px;text-transform:uppercase}.badge{display:inline-block;padding:4px 8px;border-radius:999px;background:#172648;color:var(--cyan);font-size:11px}.toast{position:fixed;right:22px;bottom:22px;background:#101d3c;border:1px solid #3b5a8e;padding:13px 16px;border-radius:11px;display:none;box-shadow:0 15px 40px #0008}input{background:#071127;color:var(--text);border:1px solid #2b416e;border-radius:9px;padding:10px;width:100%}@media(max-width:900px){.grid,.hack-grid{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.shop{grid-template-columns:1fr 1fr}}@media(max-width:650px){.app{grid-template-columns:1fr}.sidebar{position:sticky;top:0;z-index:10;flex-direction:row;overflow:auto;border-right:0;border-bottom:1px solid #182447}.logo{margin:0}.nav{min-width:68px}.main{padding:16px}.answers{grid-template-columns:1fr}.market{grid-template-columns:1fr}}
 
-#multiplayer .hero{min-height:0}
-#multiplayer .feedback{min-height:56px}
-#matchStats{grid-template-columns:repeat(2,1fr)}
-@media(max-width:900px){#matchStats{grid-template-columns:1fr}}
+.medal-place{display:inline-flex;align-items:center;gap:8px;font-weight:800}.medal-icon{font-size:28px;line-height:1;display:inline-block;filter:drop-shadow(0 3px 5px #0008)}.medal-rank{color:var(--muted);font-size:12px}.leader-top1 td{background:#ffd76a0d}.leader-top2 td{background:#d9e2f20a}.leader-top3 td{background:#d990580a}
+</style></head>
+<body><div class="app"><aside class="sidebar"><div class="logo">QH</div><button class="nav active" data-page="multiplayer"><span>⚔</span>Play</button><button class="nav" data-page="home"><span>⌂</span>Home</button><button class="nav" data-page="quiz"><span>🧠</span>Quiz</button><button class="nav" data-page="hack"><span>⚡</span>Hack</button><button class="nav" data-page="portfolio"><span>◈</span>Wallet</button><button class="nav" data-page="shop"><span>🛒</span>Shop</button><button class="nav" data-page="leaderboard"><span>🏆</span>Ranks</button><button class="nav" data-page="how"><span>?</span>How</button></aside><main class="main">
+<header class="top"><div class="brand"><h1>QuizHack Arena</h1><small>Learn • Challenge • Defend • Compete</small></div><div class="profile"><div class="avatar">🧑‍💻</div><div><strong id="playerName">Blaze</strong><small>Level <span id="levelTop">4</span> • <span id="xpTop">640</span> XP</small></div></div></header>
 
-</style>
-</head>
-<body>
-<div class="app">
-<aside class="sidebar">
-  <div class="logo">QH</div>
-  <button class="nav active" data-page="multiplayer"><span>⚔</span>Play</button>
-  <button class="nav" data-page="home"><span>⌂</span>Home</button>
-  <button class="nav" data-page="quiz"><span>🧠</span>Quiz</button>
-  <button class="nav" data-page="hack"><span>⚡</span>Hack</button>
-  <button class="nav" data-page="portfolio"><span>◈</span>Wallet</button>
-  <button class="nav" data-page="shop"><span>🛒</span>Shop</button>
-  <button class="nav" data-page="leaderboard"><span>🏆</span>Ranks</button>
-  <button class="nav" data-page="how"><span>?</span>How</button>
-</aside>
+<section id="multiplayer" class="page active"><div class="grid"><div class="card hero"><div class="eyebrow">REAL-TIME MULTIPLAYER</div><h2>Enter the Cyber Quiz Arena.</h2><p>Create or join a room for 2–7 students. A match can start with only 2 players; Supabase synchronizes questions, XP, firewall, attacks, defenses, and match results.</p><div class="actions"><button class="btn primary" onclick="createRoom()">Create Room</button><button class="btn" onclick="joinRoom()">Join Room</button><button class="btn pink" onclick="quickMatch()">Quick Match</button></div><div class="section-title"><h3>Player</h3></div><input id="nameInput" maxlength="18" placeholder="Enter your player name"><div class="section-title"><h3>Room Code</h3><span id="connectionBadge" class="badge">CONNECTING</span></div><input id="roomInput" maxlength="8" placeholder="e.g. ABC123"></div><div class="card"><div class="section-title"><h3>Matchmaking</h3><span id="roomBadge" class="badge">NO ROOM</span></div><div id="lobbyStatus" class="feedback">Connecting to Supabase…</div><div class="list" id="lobbyPlayers"></div><div class="actions" style="margin-top:14px"><button class="btn primary" id="readyBtn" onclick="toggleReady()" disabled>I'm Ready</button><button class="btn" onclick="leaveRoom()">Leave Room</button></div><p class="muted">Rooms support up to 7 players and can start with 2. The game-only “hacking” mechanic changes firewall stats; it does not attack real computers.</p></div></div></section>
 
-<main class="main">
-<header class="top">
-  <div class="brand"><h1>QuizHack Arena</h1><small>Learn • Challenge • Defend • Compete</small></div>
-  <div class="profile"><div class="avatar">🧑‍💻</div><div><strong id="playerName">Blaze</strong><small>Level <span id="levelTop">4</span> • <span id="xpTop">640</span> XP</small></div></div>
-</header>
+<section id="match" class="page"><div class="card"><div class="section-title"><div><span class="eyebrow">LIVE MATCH</span><h2 id="matchTitle">Waiting for opponent…</h2></div><span class="badge">LIVE</span></div><div class="stats" id="matchStats"></div><div id="matchAlert" class="feedback">Waiting for the multiplayer backend.</div></div><div class="grid" style="margin-top:18px"><div class="card"><div class="eyebrow">HTML BATTLE</div><div class="muted">Question <span id="mQNum">—</span></div><div class="question" id="mQuestion">Waiting for the match to start…</div><div class="answers" id="mAnswers"></div><div class="feedback" id="mFeedback">Your answer is sent to Supabase.</div></div><div class="card"><div class="section-title"><h3>⚡ Glitch Attack</h3><span id="tokenBadge" class="badge">NO TOKEN</span></div><p class="muted">A wrong quiz answer gives you one in-game Glitch Token. Choose any other player in the room as your target.</p><div class="section-title"><h3>Choose Target</h3><span id="targetCountBadge" class="badge">0 TARGETS</span></div><select id="glitchTarget" onchange="selectGlitchTarget(this.value)" style="width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:#09111f;color:var(--text);font:inherit"><option value="">No target available</option></select><div class="packet" style="margin-top:12px"><b>Effect:</b> selected player's firewall −8<br><span class="muted">Defense: solve an HTML question to recover +10 firewall.</span></div><button class="btn pink" id="attackBtn" onclick="sendAttack()" disabled style="width:100%;margin-top:12px">Send Glitch Packet</button><div class="section-title"><h3>Defense</h3><span id="defenseBadge" class="badge">NONE</span></div><div id="defenseChallenge" class="target"><b>No incoming packet.</b><p class="muted">When your opponent attacks, the defense challenge appears here.</p></div><div class="terminal" id="liveConsole">[client] Starting Supabase multiplayer…</div></div></div></section>
 
+<section id="home" class="page"><div class="grid"><div class="card hero"><div class="eyebrow">Educational cyber game</div><h2>Turn knowledge into a digital battle.</h2><p>Answer HTML questions to earn XP and fictional XEO coins. Wrong answers can become harmless game-only glitch packets.</p><div class="actions"><button class="btn primary" onclick="showPage('quiz')">Start Quiz</button><button class="btn pink" onclick="showPage('hack')">Enter Hack Arena</button></div><div class="stats"><div class="stat"><b id="coins">1250</b><small>XEO Balance</small></div><div class="stat"><b id="streak">5</b><small>Day Streak</small></div><div class="stat"><b id="level">4</b><small>Level</small></div><div class="stat"><b id="shield">82</b><small>Firewall %</small></div></div></div><div class="card"><div class="section-title"><h3>Live-looking Market</h3><span class="badge">FICTIONAL</span></div><div class="market"><div class="coin"><small>XEO</small><br><b>$12.48</b><br><span class="up">+4.8%</span></div><div class="coin"><small>BYTE</small><br><b>$3.21</b><br><span class="up">+1.9%</span></div><div class="coin"><small>GLCH</small><br><b>$0.84</b><br><span class="down">-2.2%</span></div></div></div></div></section>
 
-<section id="multiplayer" class="page active">
- <div class="grid">
-  <div class="card hero">
-   <div class="eyebrow">REAL-TIME MULTIPLAYER</div>
-   <h2>Enter the Cyber Quiz Arena.</h2>
-   <p>Join a room with another student. The server synchronizes questions, XP, firewall, attacks, defenses, and match results for both players.</p>
-   <div class="actions">
-    <button class="btn primary" onclick="createRoom()">Create Room</button>
-    <button class="btn" onclick="joinRoom()">Join Room</button>
-    <button class="btn pink" onclick="quickMatch()">Quick Match</button>
-   </div>
-   <div class="section-title"><h3>Player</h3></div>
-   <input id="nameInput" maxlength="18" placeholder="Enter your player name">
-   <div class="section-title"><h3>Room Code</h3><span id="connectionBadge" class="badge">OFFLINE</span></div>
-   <input id="roomInput" maxlength="8" placeholder="e.g. ABC123">
-  </div>
-  <div class="card">
-   <div class="section-title"><h3>Matchmaking</h3><span id="roomBadge" class="badge">NO ROOM</span></div>
-   <div id="lobbyStatus" class="feedback">Create or join a room. A match starts automatically when two students are ready.</div>
-   <div class="list" id="lobbyPlayers"></div>
-   <div class="actions" style="margin-top:14px">
-    <button class="btn primary" id="readyBtn" onclick="toggleReady()" disabled>I'm Ready</button>
-    <button class="btn" onclick="leaveRoom()">Leave Room</button>
-   </div>
-   <p class="muted" style="margin-top:14px">For classroom use, run the included server on your school/local network or deploy it to a secure host.</p>
-  </div>
- </div>
-</section>
-
-<section id="match" class="page">
- <div class="card">
-  <div class="section-title">
-   <div><span class="eyebrow">LIVE MATCH</span><h2 id="matchTitle">Waiting for opponent…</h2></div>
-   <span id="matchTimer" class="badge">--</span>
-  </div>
-  <div class="stats" id="matchStats"></div>
-  <div id="matchAlert" class="feedback">Waiting for the server.</div>
- </div>
-
- <div class="grid" style="margin-top:18px">
-  <div class="card">
-   <div class="eyebrow">HTML BATTLE</div>
-   <div class="muted">Question <span id="mQNum">—</span></div>
-   <div class="question" id="mQuestion">Waiting for the match to start…</div>
-   <div class="answers" id="mAnswers"></div>
-   <div class="feedback" id="mFeedback">Your answer is sent to the multiplayer server.</div>
-  </div>
-
-  <div class="card">
-   <div class="section-title"><h3>⚡ Glitch Attack</h3><span id="tokenBadge" class="badge">NO TOKEN</span></div>
-   <p class="muted">A wrong quiz answer gives you one in-game Glitch Token. Send it to your opponent to trigger their defense challenge.</p>
-   <div class="packet"><b>Effect:</b> opponent firewall −8<br><span class="muted">Defense challenge: solve an HTML question to recover +10 firewall.</span></div>
-   <button class="btn pink" id="attackBtn" onclick="sendAttack()" disabled style="width:100%;margin-top:12px">Send Glitch Packet</button>
-   <div class="section-title"><h3>Defense</h3><span id="defenseBadge" class="badge">NONE</span></div>
-   <div id="defenseChallenge" class="target">
-    <b>No incoming packet.</b>
-    <p class="muted">When your opponent attacks, your defense challenge appears here.</p>
-   </div>
-   <div class="terminal" id="liveConsole">[client] Connected to multiplayer UI.</div>
-  </div>
- </div>
-</section>
-
-<section id="home" class="page active">
- <div class="grid">
-  <div class="card hero">
-    <div class="eyebrow">Educational cyber game</div>
-    <h2>Turn knowledge into a digital battle.</h2>
-    <p>Answer HTML questions to earn XP and fictional XEO coins. In Hack Mode, a deliberately wrong answer creates a harmless <b>glitch packet</b> that can be sent to another player in the game. No real systems, accounts, or networks are touched.</p>
-    <div class="actions"><button class="btn primary" onclick="showPage('quiz')">Start Quiz</button><button class="btn pink" onclick="showPage('hack')">Enter Hack Arena</button></div>
-    <div class="stats">
-      <div class="stat"><b id="coins">1250</b><small>XEO Balance</small></div>
-      <div class="stat"><b id="streak">5</b><small>Day Streak</small></div>
-      <div class="stat"><b id="level">4</b><small>Level</small></div>
-      <div class="stat"><b id="shield">82</b><small>Firewall %</small></div>
-    </div>
-  </div>
-  <div class="card">
-   <div class="section-title"><h3>Live-looking Market</h3><span class="badge">FICTIONAL</span></div>
-   <div class="market">
-    <div class="coin"><small>XEO</small><br><b>$12.48</b><br><span class="up">+4.8%</span></div>
-    <div class="coin"><small>BYTE</small><br><b>$3.21</b><br><span class="up">+1.9%</span></div>
-    <div class="coin"><small>GLCH</small><br><b>$0.84</b><br><span class="down">-2.2%</span></div>
-   </div>
-   <div class="section-title"><h3>Quick Actions</h3></div>
-   <div class="actions"><button class="btn" onclick="buy('Firewall Patch',100)">Buy Firewall</button><button class="btn" onclick="showPage('leaderboard')">View Ranks</button></div>
-  </div>
- </div>
- <div class="section-title"><h3>Recent Activity</h3></div>
- <div class="card list" id="activity"><div class="row"><span>🧠 HTML Quiz completed</span><span class="up">+40 XP</span></div><div class="row"><span>⚡ Firewall repaired</span><span>+8 shield</span></div><div class="row"><span>🏆 Reached Level 4</span><span class="badge">NEW</span></div></div>
-</section>
-
-<section id="quiz" class="page">
- <div class="card quiz">
-  <div class="eyebrow">HTML Question Library</div>
-  <h2>Knowledge Challenge</h2>
-  <div class="muted">Question <span id="qnum">1</span> of <span id="qtotal">8</span> • <span id="timer">20</span>s</div>
-  <div class="question" id="question"></div><div class="answers" id="answers"></div>
-  <div class="feedback" id="feedback">Choose an answer. Correct answers earn XP; wrong answers can become glitch packets in Hack Mode.</div>
-  <div class="actions" style="margin-top:14px"><button class="btn" id="nextBtn" onclick="nextQuestion()" disabled>Next Question</button><button class="btn" onclick="showPage('hack')">Use Hack Arena</button></div>
- </div>
-</section>
-
-<section id="hack" class="page">
- <div class="hack-grid">
-  <div class="card">
-   <div class="eyebrow">Safe Simulation</div><h2>Hack Arena</h2>
-   <p class="muted">Select a student, answer a challenge, then send a harmless in-game packet. The recipient gets an HTML defense challenge. The “hack” only changes game stats.</p>
-   <div class="section-title"><h3>Choose Target</h3><span class="badge">2 PLAYERS</span></div>
-   <div class="list" id="targets"></div>
-  </div>
-  <div class="card">
-   <div class="section-title"><h3>Glitch Packet</h3><span id="packetState" class="badge">READY</span></div>
-   <div class="packet"><b>Packet type:</b> Quiz Glitch<br><span class="muted">Payload: an incorrect HTML answer token</span><br><span class="muted">Effect: -8 firewall in this game only</span></div>
-   <div class="section-title"><h3>Incoming Defense Challenge</h3><span id="defenseState" class="badge">NO ALERT</span></div>
-   <div id="defenseBox" class="target">
-     <b id="defenseTitle">No incoming glitch packets.</b>
-     <p id="defenseText" class="muted">When another student attacks you, you'll get a quick HTML challenge here.</p>
-     <button class="btn primary" id="defendBtn" onclick="defendPacket()" disabled>Defend Firewall</button>
-   </div>
-   <div class="section-title"><h3>Simulation Console</h3></div>
-   <div class="terminal" id="terminal">[17:15:00] Arena ready.
-[17:15:01] Waiting for a target...
-[17:15:02] No real network connection is used.</div>
-   <button class="btn pink" style="width:100%;margin-top:12px" id="sendBtn" onclick="sendPacket()" disabled>Send Glitch Packet</button><button class="btn" style="width:100%;margin-top:8px" onclick="demoIncoming()">Demo Incoming Attack</button>
-  </div>
- </div>
-</section>
-
-<section id="portfolio" class="page">
- <div class="card"><div class="section-title"><h2>Portfolio</h2><span class="badge">SIMULATION ONLY</span></div>
- <div class="stats"><div class="stat"><b id="pCoins">1250</b><small>XEO</small></div><div class="stat"><b>18</b><small>BYTE</small></div><div class="stat"><b>6</b><small>GLCH</small></div><div class="stat"><b>+7.4%</b><small>Session</small></div></div>
- <p class="muted">All market values and coins are fictional game assets with no cash value.</p></div>
-</section>
-
-<section id="shop" class="page">
- <div class="card"><div class="section-title"><h2>Upgrade Shop</h2><span id="shopCoins" class="badge">1250 XEO</span></div>
- <div class="shop">
-  <div class="item card"><h3>🛡️ Firewall Patch</h3><p class="muted">+15 firewall</p><div class="price">100 XEO</div><button class="btn primary" onclick="buy('Firewall Patch',100)">Buy</button></div>
-  <div class="item card"><h3>⚡ Turbo Packet</h3><p class="muted">+10 hack power for one packet</p><div class="price">180 XEO</div><button class="btn primary" onclick="buy('Turbo Packet',180)">Buy</button></div>
-  <div class="item card"><h3>🔥 Streak Shield</h3><p class="muted">Protects one streak miss</p><div class="price">250 XEO</div><button class="btn primary" onclick="buy('Streak Shield',250)">Buy</button></div>
- </div></div>
-</section>
-
-<section id="leaderboard" class="page">
- <div class="card"><div class="section-title"><h2>Leaderboard</h2><button class="btn" onclick="addPlayer()">Add Practice Player</button></div>
- <table class="table"><thead><tr><th>Place</th><th>Player</th><th>Level</th><th>XP</th><th>Firewall</th></tr></thead><tbody id="leaderRows"></tbody></table></div>
-</section>
-
-<section id="how" class="page">
- <div class="card"><h2>How to Play</h2>
- <div class="list">
-  <div class="row"><span>1. 🧠 Answer HTML questions</span><span>Earn XP</span></div>
-  <div class="row"><span>2. 🪙 Earn fictional XEO</span><span>Spend in Shop</span></div>
-  <div class="row"><span>3. ⚡ Enter Hack Arena</span><span>Select a student</span></div>
-  <div class="row"><span>4. 🧩 Wrong answer → glitch packet</span><span>Game-only effect</span></div>
-  <div class="row"><span>5. 🛡️ Defend your firewall</span><span>Repair with upgrades</span></div>
-  <div class="row"><span>6. 🏆 Climb the leaderboard</span><span>Level up</span></div>
- </div>
- <p class="muted" style="margin-top:18px">This prototype intentionally simulates “hacking” as a closed game mechanic. It does not teach or perform real intrusion, credential theft, malware, scanning, or attacks against real computers.</p>
- </div>
-</section>
-</main></div>
-<div class="toast" id="toast"></div>
-
+<section id="quiz" class="page"><div class="card" style="max-width:900px;margin:auto"><div class="eyebrow">HTML Question Library</div><h2>Knowledge Challenge</h2><div class="muted">Question <span id="qnum">1</span> of 8 • <span id="timer">20</span>s</div><div class="question" id="question"></div><div class="answers" id="answers"></div><div class="feedback" id="feedback">Choose an answer.</div><div class="actions" style="margin-top:14px"><button class="btn" id="nextBtn" onclick="nextQuestion()" disabled>Next Question</button><button class="btn" onclick="showPage('multiplayer')">Play Multiplayer</button></div></div></section>
+<section id="hack" class="page"><div class="hack-grid"><div class="card"><div class="eyebrow">Safe Simulation</div><h2>Hack Arena</h2><p class="muted">This screen uses the same game-only packet mechanic. For real student-vs-student play, use Multiplayer.</p><div class="section-title"><h3>Choose Target</h3></div><div class="list" id="targets"></div></div><div class="card"><div class="section-title"><h3>Glitch Packet</h3><span id="packetState" class="badge">READY</span></div><div class="packet"><b>Packet type:</b> Quiz Glitch<br><span class="muted">Effect: -8 firewall in this game only</span></div><div class="section-title"><h3>Defense</h3><span id="defenseState" class="badge">NO ALERT</span></div><div id="defenseBox" class="target"><b>No incoming glitch packets.</b><p class="muted">Incoming multiplayer packets appear on the Play screen.</p></div><button class="btn pink" id="sendBtn" onclick="sendAttack()" disabled style="width:100%;margin-top:12px">Send Glitch Packet</button></div></div></section>
+<section id="portfolio" class="page"><div class="card"><div class="section-title"><h2>Portfolio</h2><span class="badge">SIMULATION ONLY</span></div><div class="stats"><div class="stat"><b id="pCoins">1250</b><small>XEO</small></div><div class="stat"><b>18</b><small>BYTE</small></div><div class="stat"><b>6</b><small>GLCH</small></div><div class="stat"><b>+7.4%</b><small>Session</small></div></div><p class="muted">All market values and coins are fictional game assets with no cash value.</p></div></section>
+<section id="shop" class="page"><div class="card"><div class="section-title"><h2>Upgrade Shop</h2><span id="shopCoins" class="badge">1250 XEO</span></div><div class="shop"><div class="card"><h3>🛡️ Firewall Patch</h3><p class="muted">+15 firewall</p><b style="color:var(--yellow)">100 XEO</b><br><button class="btn primary" onclick="buy(100)">Buy</button></div><div class="card"><h3>⚡ Turbo Packet</h3><p class="muted">+10 hack power</p><b style="color:var(--yellow)">180 XEO</b><br><button class="btn primary" onclick="buy(180)">Buy</button></div><div class="card"><h3>🔥 Streak Shield</h3><p class="muted">Protects one streak miss</p><b style="color:var(--yellow)">250 XEO</b><br><button class="btn primary" onclick="buy(250)">Buy</button></div></div></div></section>
+<section id="leaderboard" class="page"><div class="card"><div class="section-title"><h2>Leaderboard</h2></div><table class="table"><thead><tr><th>Place</th><th>Player</th><th>Level</th><th>XP</th><th>Firewall</th></tr></thead><tbody id="leaderRows"></tbody></table></div></section>
+<section id="how" class="page"><div class="card"><h2>How to Play</h2><div class="list"><div class="row"><span>1. 🧠 Answer HTML questions</span><span>Earn XP</span></div><div class="row"><span>2. 🪙 Earn fictional XEO</span><span>Spend in Shop</span></div><div class="row"><span>3. ⚔ Create or join a room</span><span>Play against another student</span></div><div class="row"><span>4. ⚡ Wrong answer → Glitch Token</span><span>Game-only effect</span></div><div class="row"><span>5. 🛡️ Defend your firewall</span><span>Answer HTML challenge</span></div></div><p class="muted">This prototype simulates “hacking” as a closed game mechanic. It does not teach or perform real intrusion, credential theft, malware, scanning, or attacks against real computers.</p></div></section>
+</main></div><div class="toast" id="toast"></div>
 <script>
-const KEY='quizhack-arena-v1';
-const defaultState={name:'Blaze',coins:1250,xp:640,level:4,streak:5,shield:82,players:[
- {name:'Blaze',level:4,xp:640,shield:82},{name:'Nova',level:5,xp:820,shield:91},{name:'Pixel',level:4,xp:710,shield:74},{name:'ByteKid',level:3,xp:520,shield:88},{name:'CodeFox',level:2,xp:390,shield:67}
-]};
-let state=JSON.parse(localStorage.getItem(KEY)||'null')||structuredClone(defaultState);
-let selectedTarget=null, qIndex=0, answered=false, timer=null, timeLeft=20;
-let incomingPacket=JSON.parse(localStorage.getItem('quizhack-incoming')||'null');
-const questions=[
- {q:'Which HTML element creates a hyperlink?',a:['<link>','<a>','<href>','<url>'],c:1,e:'The <a> element creates a hyperlink.'},
- {q:'Which element is used for the largest heading?',a:['<h6>','<head>','<h1>','<title>'],c:2,e:'<h1> is the largest heading level.'},
- {q:'Which attribute provides alternative text for an image?',a:['src','alt','title','href'],c:1,e:'The alt attribute provides alternative text.'},
- {q:'Which tag creates an unordered list?',a:['<ol>','<ul>','<li>','<list>'],c:1,e:'<ul> creates an unordered list.'},
- {q:'Which element is commonly used for a clickable button?',a:['<click>','<button>','<press>','<inputbox>'],c:1,e:'The <button> element represents a clickable button.'},
- {q:'Which HTML element contains metadata and the page title?',a:['<body>','<main>','<head>','<meta>'],c:2,e:'The <head> contains metadata and the document title.'},
- {q:'Which attribute identifies an element with a unique ID?',a:['class','name','id','key'],c:2,e:'The id attribute identifies a unique element.'},
- {q:'Which tag inserts a line break?',a:['<break>','<lb>','<br>','<line>'],c:2,e:'<br> inserts a line break.'}
+/* ================= SUPABASE SETUP =================
+   Paste ONLY your Supabase Publishable key below.
+   Never paste the Secret key into this file. */
+const SUPABASE_URL="https://bijadayaiqfzykfwupeo.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY="sb_publishable_c1XNuJst_U6aL9Qdy5vhhQ_E-ou2uzF";
+const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+
+const KEY="quizhack-arena-v1";const MATCH_KEY="quizhack-arena-active-match-v1";const Q=[
+{q:"Which HTML element creates a hyperlink?",a:["<link>","<a>","<href>","<url>"],c:1,e:"The <a> element creates a hyperlink."},
+{q:"Which element is used for the largest heading?",a:["<h6>","<head>","<h1>","<title>"],c:2,e:"<h1> is the largest heading level."},
+{q:"Which attribute provides alternative text for an image?",a:["src","alt","title","href"],c:1,e:"The alt attribute provides alternative text."},
+{q:"Which tag creates an unordered list?",a:["<ol>","<ul>","<li>","<list>"],c:1,e:"<ul> creates an unordered list."},
+{q:"Which element is commonly used for a clickable button?",a:["<click>","<button>","<press>","<inputbox>"],c:1,e:"The <button> element represents a clickable button."},
+{q:"Which HTML element contains metadata and the page title?",a:["<body>","<main>","<head>","<meta>"],c:2,e:"The <head> contains metadata and the document title."},
+{q:"Which attribute identifies an element with a unique ID?",a:["class","name","id","key"],c:2,e:"The id attribute identifies a unique element."},
+{q:"Which tag inserts a line break?",a:["<break>","<lb>","<br>","<line>"],c:2,e:"<br> inserts a line break."}
 ];
+let state=JSON.parse(localStorage.getItem(KEY)||"null")||{name:"Blaze",coins:1250,xp:640,level:4,streak:5,shield:82,history:[]};
+if(!Array.isArray(state.history))state.history=[];
+let qi=Math.floor(Math.random()*Q.length),answered=false,timer=null,roomCode=null,roomId=null,meId=null,ready=false,channel=null,roomPlayers=[],room=null,token=false,currentPacket=null,currentPage="multiplayer",selectedTargetId=null;
+window.defenseTimer=null;
+window.defenseExpiring=false;
+function saveActiveMatch(){if(roomId&&roomCode)localStorage.setItem(MATCH_KEY,JSON.stringify({roomId,roomCode}));}
+function clearActiveMatch(){localStorage.removeItem(MATCH_KEY);}
+function getActiveMatch(){try{return JSON.parse(localStorage.getItem(MATCH_KEY)||"null")}catch(e){return null}}
+const $=id=>document.getElementById(id);const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
+function toast(t){const x=$("toast");x.textContent=t;x.style.display="block";clearTimeout(window.tt);window.tt=setTimeout(()=>x.style.display="none",2500)}
+function log(t){for(const id of ["liveConsole"]){const x=$(id);if(x){x.textContent+="\n"+t;x.scrollTop=x.scrollHeight}}}
 function save(){localStorage.setItem(KEY,JSON.stringify(state));render()}
-function render(){
- document.querySelector('#playerName').textContent=state.name; document.querySelector('#levelTop').textContent=state.level; document.querySelector('#xpTop').textContent=state.xp;
- ['coins','pCoins','shopCoins'].forEach(id=>{let el=document.getElementById(id); if(el)el.textContent=id==='shopCoins'?state.coins+' XEO':state.coins});
- document.querySelector('#level').textContent=state.level;document.querySelector('#streak').textContent=state.streak;document.querySelector('#shield').textContent=state.shield;
- renderTargets();renderLeaderboard();renderDefense();
+function render(){["coins","pCoins"].forEach(id=>$(id)&&($(id).textContent=state.coins));$("shopCoins").textContent=state.coins+" XEO";$("playerName").textContent=state.name;$("levelTop").textContent=state.level;$("xpTop").textContent=state.xp;$("level").textContent=state.level;$("streak").textContent=state.streak;$("shield").textContent=state.shield;renderLeaderboard();renderTargets();renderDefense()}
+function showPage(id){
+  // A started multiplayer match keeps running until Leave Room is pressed.
+  // Play and Quiz both return to the live match instead of starting/randomizing a standalone quiz.
+  if((id==="multiplayer"||id==="quiz")&&roomId&&room&&room.status==="playing")id="match";
+  currentPage=id;
+  document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
+  $(id).classList.add("active");
+  document.querySelectorAll(".nav").forEach(x=>x.classList.toggle("active",x.dataset.page===(id==="match"?"multiplayer":id)));
+  if(id==="quiz")loadQuestion();
+  if(id==="leaderboard")loadLeaderboard();
+  if(id==="match"){renderMatch();refreshPackets()}
 }
-function showPage(id){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav').forEach(x=>x.classList.toggle('active',x.dataset.page===id));if(id==='quiz')loadQuestion()}
-document.querySelectorAll('.nav').forEach(b=>b.onclick=()=>showPage(b.dataset.page));
-function loadQuestion(){
- clearInterval(timer);answered=false;timeLeft=20;document.getElementById('timer').textContent=timeLeft;document.getElementById('qnum').textContent=qIndex+1;
- let x=questions[qIndex], qs=document.getElementById('question'), ans=document.getElementById('answers');qs.textContent=x.q;ans.innerHTML='';
- x.a.forEach((v,i)=>{let b=document.createElement('button');b.className='answer';b.textContent=v;b.onclick=()=>answer(i);ans.appendChild(b)});
- document.getElementById('feedback').textContent='Choose an answer. Correct answers earn XP; a wrong answer can be converted into a game-only glitch packet.';
- document.getElementById('nextBtn').disabled=true;
- timer=setInterval(()=>{timeLeft--;document.getElementById('timer').textContent=timeLeft;if(timeLeft<=0){clearInterval(timer);answer(-1)}},1000);
-}
-function answer(i){
- if(answered)return;answered=true;clearInterval(timer);let x=questions[qIndex], buttons=[...document.querySelectorAll('.answer')];
- buttons.forEach((b,j)=>{if(j===x.c)b.classList.add('correct');if(j===i&&i!==x.c)b.classList.add('wrong')});
- let ok=i===x.c;
- if(ok){state.xp+=40;state.coins+=50;document.getElementById('feedback').textContent='✓ Correct! '+x.e+' +40 XP and +50 XEO.';state.level=Math.max(1,Math.floor(state.xp/160)+1)}
- else{document.getElementById('feedback').textContent='✕ '+(i===-1?'Time expired. ':'Wrong answer. ')+x.e+' You can use this wrong-answer token as a harmless glitch packet in Hack Arena.'}
- state.players[0]={name:state.name,level:state.level,xp:state.xp,shield:state.shield};save();document.getElementById('nextBtn').disabled=false;
-}
-function nextQuestion(){qIndex=(qIndex+1)%questions.length;loadQuestion()}
-function renderTargets(){
- const el=document.getElementById('targets');el.innerHTML='';
- state.players.filter(p=>p.name!==state.name).forEach((p,idx)=>{let d=document.createElement('div');d.className='target'+(selectedTarget===p.name?' selected':'');d.innerHTML=`<h4>${p.name} <span class="badge">Lv ${p.level}</span></h4><span class="muted">${p.xp} XP</span><div class="shield"><i style="width:${p.shield}%"></i></div><small>Firewall ${p.shield}%</small>`;d.onclick=()=>{selectedTarget=p.name;document.getElementById('sendBtn').disabled=false;document.getElementById('packetState').textContent='TARGETED';log(`[17:15:${new Date().getSeconds().toString().padStart(2,'0')}] Target selected: ${p.name}`);renderTargets()};el.appendChild(d)})
-}
-function sendPacket(){
- if(!selectedTarget)return;
- let p=state.players.find(x=>x.name===selectedTarget);
- let damage=8;
- p.shield=Math.max(0,p.shield-damage);
-
- // Create a game-only incoming packet. In a real multiplayer build this
- // object would be stored server-side and delivered to the recipient.
- incomingPacket={from:state.name,to:p.name,question:questions[qIndex],damage:damage,created:Date.now()};
- localStorage.setItem('quizhack-incoming',JSON.stringify(incomingPacket));
-
- document.getElementById('packetState').textContent='SENT';
- log(`[17:15:${new Date().getSeconds().toString().padStart(2,'0')}] Glitch packet encoded from quiz result.
-[17:15:${new Date().getSeconds().toString().padStart(2,'0')}] Packet sent to ${p.name}.
-[17:15:${new Date().getSeconds().toString().padStart(2,'0')}] Simulation effect: firewall -${damage}%.`);
-
- showToast(`Glitch packet sent to ${p.name} (-${damage} firewall)`);
- save();
- renderDefense();
-}
-
-function renderDefense(){
- const stateEl=document.getElementById('defenseState');
- const title=document.getElementById('defenseTitle');
- const text=document.getElementById('defenseText');
- const btn=document.getElementById('defendBtn');
- if(!stateEl)return;
-
- if(incomingPacket && incomingPacket.to===state.name){
-   stateEl.textContent='INCOMING';
-   title.textContent=`⚠️ ${incomingPacket.from} sent you a Glitch Packet`;
-   text.textContent='Solve the HTML challenge to block the packet and restore 10 firewall. Your defense is a game-only action.';
-   btn.disabled=false;
-   btn.textContent='Defend Firewall (+10)';
- } else {
-   stateEl.textContent='NO ALERT';
-   title.textContent='No incoming glitch packets.';
-   text.textContent='When another student attacks you, you’ll get a quick HTML challenge here.';
-   btn.disabled=true;
-   btn.textContent='Defend Firewall';
- }
-}
-
-function defendPacket(){
- if(!incomingPacket || incomingPacket.to!==state.name)return;
- let x=incomingPacket.question;
- let choice=prompt(
-   'DEFENSE CHALLENGE\\n\\n'+x.q+'\\n\\n'+
-   x.a.map((a,i)=>(i+1)+'. '+a).join('\\n')+
-   '\\n\\nEnter 1, 2, 3, or 4:'
- );
- let idx=Number(choice)-1;
-
- if(idx===x.c){
-   state.shield=Math.min(100,state.shield+10);
-   state.xp+=30;
-   state.coins+=25;
-   state.players[0]={name:state.name,level:Math.max(1,Math.floor(state.xp/160)+1),xp:state.xp,shield:state.shield};
-   state.level=state.players[0].level;
-   incomingPacket=null;
-   localStorage.removeItem('quizhack-incoming');
-   document.getElementById('defenseState').textContent='BLOCKED';
-   log(`[17:15:${new Date().getSeconds().toString().padStart(2,'0')}] Defense challenge solved.
-[17:15:${new Date().getSeconds().toString().padStart(2,'0')}] Glitch packet blocked. Firewall +10%.`);
-   showToast('Glitch blocked! +10 firewall, +30 XP, +25 XEO');
-   save();
-   renderDefense();
- } else {
-   state.shield=Math.max(0,state.shield-3);
-   log(`[17:15:${new Date().getSeconds().toString().padStart(2,'0')}] Defense failed. Firewall -3%.`);
-   showToast('Defense failed. Try the next challenge!');
-   save();
-   renderDefense();
- }
-}
-
-function log(t){let x=document.getElementById('terminal');x.textContent+=`\n${t}`;x.scrollTop=x.scrollHeight}
-function demoIncoming(){
- incomingPacket={from:'Nova',to:state.name,question:questions[(qIndex+2)%questions.length],damage:8,created:Date.now()};
- localStorage.setItem('quizhack-incoming',JSON.stringify(incomingPacket));
- log(`[17:15:${new Date().getSeconds().toString().padStart(2,'0')}] Demo attack received from Nova.
-[17:15:${new Date().getSeconds().toString().padStart(2,'0')}] Defense challenge available.`);
- showToast('Incoming Glitch Packet! Defend your firewall.');
- renderDefense();
-}
-
-function buy(item,cost){if(state.coins<cost){showToast('Not enough XEO');return}state.coins-=cost;if(item==='Firewall Patch')state.shield=Math.min(100,state.shield+15);showToast(item+' purchased');save()}
-function addPlayer(){let n='Guest'+Math.floor(Math.random()*90+10);state.players.push({name:n,level:1,xp:120,shield:100});save();showToast(n+' joined the practice arena')}
+document.querySelectorAll(".nav").forEach(b=>b.onclick=()=>showPage(b.dataset.page));
+function loadQuestion(){clearInterval(timer);answered=false;let left=20;$("timer").textContent=left;$("qnum").textContent=qi+1;$("question").textContent=Q[qi].q;const box=$("answers");box.innerHTML="";Q[qi].a.forEach((v,i)=>{const b=document.createElement("button");b.className="answer";b.textContent=v;b.onclick=()=>answer(i);box.appendChild(b)});$("nextBtn").disabled=true;$("feedback").textContent="Choose an answer.";timer=setInterval(()=>{left--;$("timer").textContent=left;if(left<=0){clearInterval(timer);answer(-1)}},1000)}
+function answer(i){if(answered)return;answered=true;clearInterval(timer);const x=Q[qi];const correct=i===x.c;document.querySelectorAll("#answers .answer").forEach((b,j)=>{if(j===x.c)b.classList.add("correct");if(j===i&&i!==x.c)b.classList.add("wrong")});if(correct){state.xp+=40;state.coins+=50;state.level=Math.floor(state.xp/160)+1;$("feedback").textContent="✓ Correct! "+x.e+" +40 XP and +50 XEO."}else $("feedback").textContent="✕ Wrong answer. "+x.e+" You can earn a Glitch Token in Multiplayer.";state.history.push({time:new Date().toISOString(),question:x.q,correct:correct,xp:state.xp,coins:state.coins});if(state.history.length>100)state.history=state.history.slice(-100);save();$("nextBtn").disabled=false}
+function nextQuestion(){if(roomId&&room&&room.status==="playing"){showPage("match");return}let next=qi;if(Q.length>1){while(next===qi)next=Math.floor(Math.random()*Q.length)}qi=next;loadQuestion()}
+function buy(cost){if(state.coins<cost)return toast("Not enough XEO");state.coins-=cost;if(cost===100)state.shield=Math.min(100,state.shield+15);state.history.push({time:new Date().toISOString(),type:"purchase",cost:cost,xp:state.xp,coins:state.coins});if(state.history.length>100)state.history=state.history.slice(-100);save();toast("Upgrade purchased") }
+let leaderboardRows=[];
 function renderLeaderboard(){
- let arr=[...state.players].sort((a,b)=>b.xp-a.xp),body=document.getElementById('leaderRows');body.innerHTML=arr.map((p,i)=>`<tr><td>${i+1}</td><td><b>${p.name}</b></td><td>${p.level}</td><td>${p.xp}</td><td>${p.shield}%</td></tr>`).join('');
+  const rows=leaderboardRows.length?leaderboardRows:[];
+  const medalFor=place=>place===1?"🥇":place===2?"🥈":place===3?"🥉":"";
+  $("leaderRows").innerHTML=rows.length?rows.map((p,i)=>{
+    const place=Number(p.place??(i+1));
+    const medal=medalFor(place);
+    const medalName=place===1?"Gold":place===2?"Silver":"Bronze";
+    const placeHtml=medal?`<span class="medal-place"><span class="medal-icon" role="img" aria-label="${medalName} medal">${medal}</span><span class="medal-rank">#${place}</span></span>`:`<b>#${place}</b>`;
+    return `<tr class="${place<=3?`leader-top${place}`:""}"><td>${placeHtml}</td><td><b>${esc(p.name)}</b></td><td>${p.level||1}</td><td>${p.xp||0}</td><td>${p.shield??100}%</td></tr>`;
+  }).join(""):`<tr><td colspan="5" class="muted">Loading shared leaderboard…</td></tr>`;
 }
-function showToast(t){let x=document.getElementById('toast');x.textContent=t;x.style.display='block';setTimeout(()=>x.style.display='none',2200)}
-render();
+async function loadLeaderboard(){
+  const r=await sb.rpc("get_leaderboard",{p_limit:100});
+  if(r.error){log("[leaderboard] "+r.error.message);$("leaderRows").innerHTML=`<tr><td colspan="5" class="muted">Could not load leaderboard.</td></tr>`;return}
+  leaderboardRows=r.data||[];renderLeaderboard();
+}
+async function ensureProfile(){
+  const r=await sb.rpc("ensure_player_profile",{p_name:state.name||"Player"});
+  if(r.error)log("[profile] "+r.error.message);
+}
+async function syncProfile(){
+  const r=await sb.rpc("sync_player_profile");
+  if(r.error){log("[profile] "+r.error.message);return null}
+  const p=first(r.data);
+  if(p&&p.id){state.name=p.name||state.name;state.xp=p.xp??state.xp;state.coins=p.coins??state.coins;state.level=p.level??state.level;state.shield=p.shield??state.shield;localStorage.setItem(KEY,JSON.stringify(state));}
+  return p;
+}
+function selectGlitchTarget(id){selectedTargetId=id||null;renderMatch()}
+function renderTargets(){
+  const others=roomPlayers.filter(p=>p.id!==meId);
+  $("targets").innerHTML=others.map(p=>`<div class="target" onclick="selectGlitchTarget('${p.id}');showPage('match')"><h4>${esc(p.name)}</h4><span class="muted">${p.xp||0} XP • ${p.coins||0} XEO</span><div class="shield"><i style="width:${p.shield??100}%"></i></div><small>Firewall ${p.shield??100}%</small></div>`).join("")||'<div class="muted">At least 2 players are needed before you have a Glitch target.</div>';
+}
+function renderTargetPicker(){
+  const picker=$("glitchTarget"); if(!picker)return;
+  const others=roomPlayers.filter(p=>p.id!==meId);
+  if(selectedTargetId&&!others.some(p=>p.id===selectedTargetId))selectedTargetId=null;
+  if(others.length===1)selectedTargetId=others[0].id;
+  picker.innerHTML=others.length?'<option value="">Choose a player…</option>'+others.map(p=>`<option value="${p.id}" ${p.id===selectedTargetId?'selected':''}>${esc(p.name)} — Firewall ${p.shield??100}%</option>`).join(''):'<option value="">No target available</option>';
+  $("targetCountBadge").textContent=others.length+" TARGET"+(others.length===1?"":"S");
+}
+function stopDefenseTimer(){if(window.defenseTimer){clearInterval(window.defenseTimer);window.defenseTimer=null}}
+function defenseSecondsLeft(){if(!currentPacket?.defense_expires_at)return 0;return Math.max(0,Math.ceil((new Date(currentPacket.defense_expires_at).getTime()-Date.now())/1000))}
+function updateDefenseClock(){const el=$("defenseClock");if(!el||!currentPacket)return;const left=defenseSecondsLeft();el.textContent=`⏱️ DEFENSE: ${left}s`;if(left<=5)el.style.fontWeight="900";if(left<=0&&!window.defenseExpiring)expireDefense()}
+function startDefenseTimer(){stopDefenseTimer();updateDefenseClock();if(currentPacket)window.defenseTimer=setInterval(updateDefenseClock,250)}
+function renderDefense(){const b=$("defenseChallenge");if(!currentPacket){stopDefenseTimer();$("defenseBadge").textContent="NONE";$("defenseState").textContent="NO ALERT";b.innerHTML='<b>No incoming packet.</b><p class="muted">When your opponent attacks, the defense challenge appears here.</p>';return}$("defenseBadge").textContent="INCOMING";$("defenseState").textContent="INCOMING";let q=currentPacket.question;if(typeof q==="string")try{q=JSON.parse(q)}catch(e){q=null}const text=q?.text||q?.q;const options=q?.options||q?.a;if(!text||!Array.isArray(options)){b.innerHTML=`<b>⚠️ Incoming Glitch Packet</b><p id="defenseClock" class="badge">⏱️ DEFENSE: ${defenseSecondsLeft()}s</p><p class="muted">Firewall damage: -${currentPacket.damage??8}. Defense challenge received.</p>`;startDefenseTimer();return}b.innerHTML=`<b>⚠️ Incoming Glitch Packet</b><p id="defenseClock" class="badge">⏱️ DEFENSE: ${defenseSecondsLeft()}s</p><p class="muted">Your opponent hit your firewall for ${currentPacket.damage??8} points. Answer before the server deadline:</p><p>${esc(text)}</p><div class="answers">${options.map((a,i)=>`<button class="answer" onclick="defendCurrent(${i})">${esc(a)}</button>`).join("")}</div>`;startDefenseTimer()}
+async function connect(){const s=await sb.auth.getSession();if(!s.data.session){const r=await sb.auth.signInAnonymously();if(r.error)throw r.error}$("connectionBadge").textContent="ONLINE";log("[client] Supabase connected.")}
+async function name(){state.name=(($("nameInput").value||state.name||"Player").trim().slice(0,18)||"Player");save();return state.name}
+function first(d){return Array.isArray(d)?(d[0]||{}):(d||{})}
+async function createRoom(){try{await connect();const n=await name();const r=await sb.rpc("create_game_room",{p_name:n});if(r.error)throw r.error;const x=first(r.data);const code=x.room_code||x.code||x.room;await enterRoom(code)}catch(e){toast(e.message);log("[error] "+e.message)}}
+async function joinRoom(){try{await connect();const code=($("roomInput").value||"").trim().toUpperCase();if(!code)return toast("Enter a room code first.");const n=await name();const r=await sb.rpc("join_game_room",{p_room_code:code,p_name:n});if(r.error)throw r.error;await enterRoom(code)}catch(e){toast(e.message);log("[error] "+e.message)}}
+async function quickMatch(){try{await connect();const n=await name();const r=await sb.rpc("quick_match",{p_name:n});if(r.error)throw r.error;const x=first(r.data),code=x.room_code||x.code||x.room;if(code)await enterRoom(code);else toast("Waiting for another student…")}catch(e){toast(e.message);log("[error] "+e.message)}}
+async function enterRoom(code){if(!code)return;roomCode=code;const rr=await sb.from("game_rooms").select("id,room_code").eq("room_code",code).single();if(rr.error){toast(rr.error.message);log("[error] "+rr.error.message);return}roomId=rr.data.id;saveActiveMatch();$("roomInput").value=code;$("roomBadge").textContent=code;$("readyBtn").disabled=false;await refreshRoom();subscribe();await loadRoom();showPage(room&&["playing","finished"].includes(room.status)?"match":"multiplayer");toast("Room "+code)}
+async function refreshRoom(){if(!roomId)return;const r=await sb.from("game_players").select("*").eq("room_id",roomId);if(r.error){log("[error] "+r.error.message);return}roomPlayers=r.data||[];meId=(await sb.auth.getUser()).data.user?.id;const me=roomPlayers.find(p=>p.id===meId);if(me){state.xp=Math.max(state.xp||0,me.xp||0);state.coins=Math.max(state.coins||0,me.coins||0);state.level=Math.max(state.level||1,me.level||1);localStorage.setItem(KEY,JSON.stringify(state));render();await syncProfile()}ready=!!me?.ready;$("readyBtn").textContent=ready?"Ready ✓":"I'm Ready";renderLobby();renderLeaderboard();renderTargets();$("lobbyStatus").textContent=roomPlayers.length>=2?`${roomPlayers.length}/7 players connected. The match can start now when all current players are ready.`:`${roomPlayers.length}/7 players connected. Waiting for at least one more student…`;if(roomPlayers.length>=2&&roomPlayers.every(p=>p.ready))await loadRoom();if(room&&["playing","finished"].includes(room.status)){renderMatch();if(currentPage==="multiplayer")showPage("match")}}
+function renderLobby(){$("lobbyPlayers").innerHTML=roomPlayers.map((p,i)=>`<div class="row"><span>🧑‍💻 <b>${esc(p.name)}</b> <small class="muted">Player ${i+1}/7</small></span><span class="badge">${p.ready?"READY":"WAITING"}</span></div>`).join("")}
+function subscribe(){if(channel)sb.removeChannel(channel);channel=sb.channel("qha-"+roomId).on("postgres_changes",{event:"*",schema:"public",table:"game_players",filter:"room_id=eq."+roomId},refreshRoom).on("postgres_changes",{event:"*",schema:"public",table:"game_rooms",filter:"id=eq."+roomId},loadRoom).on("postgres_changes",{event:"*",schema:"public",table:"game_packets",filter:"room_id=eq."+roomId},refreshPackets).subscribe(status=>log("[realtime] "+status))}
+async function toggleReady(){if(!roomId)return;try{ready=!ready;const r=await sb.rpc("set_ready",{p_room_id:roomId,p_ready:ready});if(r.error){ready=!ready;throw r.error}$("readyBtn").textContent=ready?"Ready ✓":"I'm Ready";await refreshRoom();await loadRoom()}catch(e){toast(e.message);log("[error] "+e.message)}}
+async function leaveRoom(){try{if(roomId){await syncProfile();await sb.rpc("leave_game_room",{p_room_id:roomId})}}catch(e){log("[error] "+e.message)}if(channel)sb.removeChannel(channel);stopDefenseTimer();clearActiveMatch();roomCode=null;roomId=null;roomPlayers=[];room=null;currentPacket=null;selectedTargetId=null;ready=false;$("roomBadge").textContent="NO ROOM";$("readyBtn").disabled=true;$("readyBtn").textContent="I'm Ready";showPage("multiplayer")}
+async function loadRoom(){if(!roomId)return;const r=await sb.from("game_rooms").select("*").eq("id",roomId).maybeSingle();if(r.error){log("[error] "+r.error.message);return}if(!r.data)return;room=r.data;if(room.status==="playing"||room.status==="finished"){renderMatch();await refreshPackets();if(currentPage==="multiplayer")showPage("match")}}
+function normalize(q){if(!q)return null;if(typeof q==="string")try{q=JSON.parse(q)}catch(e){return null}if(q.text&&Array.isArray(q.options))return {q:q.text,a:q.options,number:room?.question_number};if(q.q&&Array.isArray(q.a))return q;return null}
+function renderMatch(){
+  const me=roomPlayers.find(p=>p.id===meId),others=roomPlayers.filter(p=>p.id!==meId);
+  $("matchTitle").textContent=roomPlayers.length>=2?`${roomPlayers.length}-Player Cyber Battle`:"Live Match";
+  $("matchStats").innerHTML=roomPlayers.map(p=>`<div class="stat"><b>${esc(p.name)}${p.id===meId?' (You)':''}</b><small>Lv ${p.level||1} • ${p.xp||0} XP • ${p.coins||0} XEO • Firewall ${p.shield??100}% • ${p.tokens||0} Token${(p.tokens||0)===1?'':'s'}</small></div>`).join("");
+  const q=normalize(room?.question);if(q){$("mQNum").textContent=q.number||"—";$("mQuestion").textContent=q.q;$("mAnswers").innerHTML=q.a.map((a,i)=>`<button class="answer" onclick="submitAnswer(${i})">${esc(a)}</button>`).join("")}
+  const tokenCount=me?.tokens??(token?1:0); token=tokenCount>0;
+  renderTargetPicker();
+  $("tokenBadge").textContent=tokenCount?`${tokenCount} TOKEN${tokenCount===1?'':'S'}`:"NO TOKEN";
+  $("attackBtn").disabled=!token||!selectedTargetId||others.length===0||room?.status==="finished";
+  $("attackBtn").textContent=selectedTargetId?`Send Glitch → ${(others.find(p=>p.id===selectedTargetId)||{}).name||'Target'}`:"Send Glitch Packet";
+  $("mFeedback").textContent=room?.status==="finished"?"Match finished.":"Live — 2 to 7 players, synchronized through Supabase.";
+}
+async function submitAnswer(i){if(!roomId)return;const r=await sb.rpc("submit_answer",{p_room_id:roomId,p_answer:i});if(r.error)return toast(r.error.message);const x=first(r.data);if(x.correct){$("mFeedback").textContent="✓ Correct! +40 XP and +50 XEO."}else{token=true;$("mFeedback").textContent="✕ Wrong answer. Glitch Token earned — choose a player to target!";toast("Glitch Token earned!")}await refreshRoom();await syncProfile();await loadLeaderboard()}
+async function sendAttack(){if(!roomId||!token)return;if(!selectedTargetId)return toast("Choose a player to target first.");const target=roomPlayers.find(p=>p.id===selectedTargetId);if(!target||target.id===meId)return toast("Choose another player in the room.");const r=await sb.rpc("send_glitch",{p_room_id:roomId,p_target_id:selectedTargetId});if(r.error)return toast(r.error.message);token=false;$("packetState").textContent="SENT";toast(`Glitch Packet sent to ${target.name}!`);log(`[server] Glitch packet sent to ${target.name}.`);await refreshRoom();await refreshPackets()}
+async function refreshPackets(){if(!roomId)return;const r=await sb.from("game_packets").select("*").eq("room_id",roomId).order("created_at",{ascending:false});if(r.error){log("[error] "+r.error.message);return}const previousId=currentPacket?.id||null;const p=(r.data||[]).find(x=>x.target_id===meId&&x.answered===false);currentPacket=p||null;if(currentPacket&&currentPacket.defense_expires_at&&new Date(currentPacket.defense_expires_at).getTime()<=Date.now()){await expireDefense();return}if(currentPacket&&currentPacket.id!==previousId){toast("⚠️ Incoming Glitch Packet!");log("[alert] Incoming glitch packet. Firewall damage: -"+(currentPacket.damage??8));$("matchAlert").textContent="⚠️ GLITCH ATTACK! Your firewall was hit. Complete the defense challenge.";if(currentPage==="match")renderDefense()}else if(!currentPacket&&previousId){$("matchAlert").textContent="Defense resolved. Match continues."}renderDefense()}
+async function expireDefense(){if(!currentPacket||!roomId||window.defenseExpiring)return;window.defenseExpiring=true;stopDefenseTimer();const packetId=currentPacket.id;const r=await sb.rpc("expire_glitch_defense",{p_room_id:roomId,p_packet_id:packetId});window.defenseExpiring=false;if(r.error){log("[error] "+r.error.message);await refreshPackets();return}const x=first(r.data);if(x.expired){toast("⏱️ Defense time expired.");$("mFeedback").textContent="⏱️ Defense timer expired. -3 additional Firewall.";currentPacket=null;await refreshRoom();await syncProfile();await loadLeaderboard();await refreshPackets()}else{await refreshPackets()}}
+async function defendCurrent(i){if(!currentPacket||!roomId||window.defenseExpiring)return;if(defenseSecondsLeft()<=0){await expireDefense();return}stopDefenseTimer();const r=await sb.rpc("defend_glitch",{p_room_id:roomId,p_packet_id:currentPacket.id,p_answer:i});if(r.error){toast(r.error.message);await refreshPackets();return}const x=first(r.data);toast(x.correct?"Glitch blocked! +10 firewall":"Defense failed.");$("mFeedback").textContent=x.correct?"🛡️ Defense successful! +10 firewall, +30 XP, +25 XEO.":"Defense failed. Firewall penalty applied.";currentPacket=null;await refreshRoom();await syncProfile();await loadLeaderboard();await refreshPackets()}
+async function restoreActiveMatch(){
+  // Supabase is the source of truth after a refresh. Do not depend only on browser localStorage.
+  const u=await sb.auth.getUser();
+  meId=u.data.user?.id;
+  if(!meId)return false;
 
-// ---------------- Multiplayer client ----------------
-let socket=null, roomCode=null, playerId=null, ready=false, matchState=null, attackToken=false, currentDefense=null;
-const WS_URL=(location.protocol==='https:'?'wss://':'ws://')+location.host;
+  let saved=getActiveMatch();
+  let candidateRoomId=saved?.roomId||null;
+  let candidateRoomCode=saved?.roomCode||null;
 
-function mpLog(line){
- const el=document.getElementById('liveConsole');
- if(el){el.textContent += '\n'+line; el.scrollTop=el.scrollHeight;}
-}
-function setConnection(text, online){
- const el=document.getElementById('connectionBadge');
- if(el){el.textContent=text; el.className='badge';}
-}
-function ensureSocket(){
- if(socket && socket.readyState===WebSocket.OPEN) return Promise.resolve();
- return new Promise((resolve,reject)=>{
-  socket=new WebSocket(WS_URL);
-  socket.onopen=()=>{setConnection('ONLINE',true); mpLog('[client] WebSocket connected.'); resolve();};
-  socket.onerror=()=>{setConnection('ERROR',false); reject(new Error('Connection failed'));};
-  socket.onclose=()=>{setConnection('OFFLINE',false); mpLog('[client] Connection closed.');};
-  socket.onmessage=(e)=>handleMP(JSON.parse(e.data));
- });
-}
-function mpSend(type,data={}){
- if(socket && socket.readyState===WebSocket.OPEN) socket.send(JSON.stringify({type,...data}));
-}
-function getName(){
- const v=(document.getElementById('nameInput').value||state.name||'Player').trim().slice(0,18);
- state.name=v||'Player'; save(); return state.name;
-}
-async function createRoom(){
- try{await ensureSocket(); getName(); mpSend('create_room',{name:state.name});}
- catch(e){showToast('Could not connect to the multiplayer server.');}
-}
-async function joinRoom(){
- const code=(document.getElementById('roomInput').value||'').trim().toUpperCase();
- if(!code){showToast('Enter a room code first.');return;}
- try{await ensureSocket(); getName(); mpSend('join_room',{name:state.name,room:code});}
- catch(e){showToast('Could not connect to the multiplayer server.');}
-}
-async function quickMatch(){
- try{await ensureSocket(); getName(); mpSend('quick_match',{name:state.name});}
- catch(e){showToast('Could not connect to the multiplayer server.');}
-}
-function toggleReady(){
- if(!roomCode)return;
- ready=!ready; mpSend('ready',{ready});
- document.getElementById('readyBtn').textContent=ready?'Ready ✓':'I’m Ready';
-}
-function leaveRoom(){
- if(socket) mpSend('leave_room');
- roomCode=null; ready=false; matchState=null; attackToken=false; currentDefense=null;
- document.getElementById('roomBadge').textContent='NO ROOM';
- document.getElementById('lobbyStatus').textContent='Create or join a room. A match starts automatically when two students are ready.';
- document.getElementById('readyBtn').disabled=true;
- showPage('multiplayer');
-}
-function renderLobby(players=[]){
- const el=document.getElementById('lobbyPlayers'); if(!el)return;
- el.innerHTML=players.map(p=>`<div class="row"><span>🧑‍💻 <b>${escapeHTML(p.name)}</b></span><span class="badge">${p.ready?'READY':'WAITING'}</span></div>`).join('');
-}
-function renderMatch(s){
- matchState=s;
- const me=s.players.find(p=>p.id===playerId), opp=s.players.find(p=>p.id!==playerId);
- if(!me)return;
- document.getElementById('matchTitle').textContent=opp?`${me.name} vs ${opp.name}`:'Waiting for opponent…';
- document.getElementById('matchStats').innerHTML=s.players.map(p=>`<div class="stat"><b>${escapeHTML(p.name)}</b><small>Lv ${p.level} • ${p.xp} XP • Firewall ${p.shield}%</small></div>`).join('');
- document.getElementById('tokenBadge').textContent=attackToken?'1 TOKEN':'NO TOKEN';
- document.getElementById('attackBtn').disabled=!attackToken || !opp || s.finished;
- if(s.question){
-  document.getElementById('mQNum').textContent=s.question.number;
-  document.getElementById('mQuestion').textContent=s.question.q;
-  const box=document.getElementById('mAnswers'); box.innerHTML='';
-  s.question.a.forEach((v,i)=>{
-   const b=document.createElement('button'); b.className='answer'; b.textContent=v;
-   b.disabled=!!s.question.answeredBy?.[playerId];
-   b.onclick=()=>submitMatchAnswer(i);
-   box.appendChild(b);
-  });
- }
-}
-function submitMatchAnswer(index){
- if(!matchState || !matchState.question || matchState.question.answeredBy?.[playerId])return;
- mpSend('answer',{room:roomCode,index});
-}
-function sendAttack(){
- if(!attackToken || !roomCode)return;
- mpSend('attack',{room:roomCode});
- attackToken=false; renderMatch(matchState);
- mpLog('[client] Glitch packet sent.');
-}
-function renderDefense(){
- const b=document.getElementById('defenseChallenge'), badge=document.getElementById('defenseBadge');
- if(!currentDefense){badge.textContent='NONE';b.innerHTML='<b>No incoming packet.</b><p class="muted">When your opponent attacks, your defense challenge appears here.</p>';return;}
- badge.textContent='INCOMING';
- b.innerHTML=`<b>⚠️ Glitch Packet from ${escapeHTML(currentDefense.from)}</b>
- <p>${escapeHTML(currentDefense.question.q)}</p>
- <div class="answers" style="grid-template-columns:1fr 1fr">${currentDefense.question.a.map((a,i)=>`<button class="answer" onclick="defend(${i})">${escapeHTML(a)}</button>`).join('')}</div>`;
-}
-function defend(index){
- if(!currentDefense)return;
- mpSend('defend',{room:roomCode,packetId:currentDefense.packetId,index});
-}
-function handleMP(m){
- if(m.type==='welcome'){playerId=m.id;mpLog('[client] Player ID assigned.');return;}
- if(m.type==='room_created'||m.type==='room_joined'||m.type==='queued'){
-  roomCode=m.room; document.getElementById('roomInput').value=roomCode; document.getElementById('roomBadge').textContent=roomCode;
-  document.getElementById('readyBtn').disabled=false; document.getElementById('lobbyStatus').textContent=m.message;
-  renderLobby(m.players||[]); showPage('multiplayer'); showToast(m.message);
-  return;
- }
- if(m.type==='lobby'){
-  renderLobby(m.players||[]); document.getElementById('lobbyStatus').textContent=m.message||'Waiting for players…'; return;
- }
- if(m.type==='match_start'){
-  roomCode=m.room; document.getElementById('roomBadge').textContent=roomCode;
-  matchState=m.state; attackToken=false; currentDefense=null; showPage('match'); renderMatch(matchState); renderDefense();
-  mpLog('[server] Match started.'); showToast('Match started!');
-  return;
- }
- if(m.type==='state'){
-  renderMatch(m.state);
-  if(m.message)document.getElementById('mFeedback').textContent=m.message;
-  if(m.state.finished){document.getElementById('matchAlert').textContent=m.result||'Match finished.';}
-  return;
- }
- if(m.type==='answer_result'){
-  if(m.correct){document.getElementById('mFeedback').textContent='✓ Correct! +40 XP and +50 XEO.';}
-  else {attackToken=true;document.getElementById('mFeedback').textContent='✕ Wrong answer. You earned a Glitch Token — send it to your opponent!';}
-  renderMatch(m.state); return;
- }
- if(m.type==='incoming_attack'){
-  currentDefense=m.packet; renderDefense(); showToast(`⚠️ ${m.packet.from} attacked your firewall!`); mpLog(`[server] Incoming Glitch Packet from ${m.packet.from}.`); return;
- }
- if(m.type==='defense_result'){
-  currentDefense=null; renderDefense();
-  document.getElementById('mFeedback').textContent=m.correct?'🛡️ Defense successful! +10 firewall, +30 XP, +25 XEO.':'Defense failed. The packet remains blocked only if solved correctly.';
-  renderMatch(m.state); return;
- }
- if(m.type==='error'){showToast(m.message||'Multiplayer error');return;}
- if(m.type==='match_end'){renderMatch(m.state);showPage('match');showToast(m.result);return;}
-}
-function escapeHTML(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+  // If localStorage was cleared/lost, recover the player's current room from game_players.
+  if(!candidateRoomId){
+    const pr=await sb.from("game_players").select("room_id").eq("id",meId).maybeSingle();
+    if(pr.data?.room_id)candidateRoomId=pr.data.room_id;
+  }
+  if(!candidateRoomId)return false;
 
-// Open multiplayer by default on load, but preserve local profile data.
-window.addEventListener('load',()=>{
- document.getElementById('nameInput').value=state.name||'Blaze';
- showPage('multiplayer');
-});
+  const rr=await sb.from("game_rooms").select("*").eq("id",candidateRoomId).maybeSingle();
+  if(rr.error||!rr.data)return false;
+  if(!["waiting","playing"].includes(rr.data.status))return false;
 
-</script>
-</body>
-</html>
+  // Confirm this signed-in player still belongs to this room before resuming it.
+  const membership=await sb.from("game_players").select("*").eq("room_id",candidateRoomId).eq("id",meId).maybeSingle();
+  if(membership.error||!membership.data)return false;
+
+  room=rr.data;
+  roomId=rr.data.id;
+  roomCode=rr.data.room_code||candidateRoomCode;
+  saveActiveMatch();
+  $("roomInput").value=roomCode||"";
+  $("roomBadge").textContent=roomCode||"ROOM";
+  $("readyBtn").disabled=false;
+
+  await refreshRoom();
+  subscribe();
+  await loadRoom();
+  await refreshPackets();
+
+  if(room?.status==="playing"){
+    showPage("match");
+    renderMatch();
+    $("matchAlert").textContent="Match restored after refresh — game continues.";
+  }else{
+    showPage("multiplayer");
+    $("lobbyStatus").textContent="Room restored after refresh. Waiting for the match to start.";
+  }
+  return true;
+}
+
+async function boot(){
+  try{
+    $("nameInput").value=state.name;
+    await connect();
+    await ensureProfile();
+    await loadLeaderboard();
+    const resumed=await restoreActiveMatch();
+    if(resumed){render();return;}
+
+    clearActiveMatch();roomId=null;roomCode=null;room=null;roomPlayers=[];currentPacket=null;
+    // Random standalone question only when there is NO waiting/playing multiplayer room.
+    qi=Math.floor(Math.random()*Q.length);
+    $("lobbyStatus").textContent="Connected. Create a room, join with a code, or Quick Match.";
+    render();showPage("multiplayer");
+  }catch(e){
+    $("connectionBadge").textContent="OFFLINE";
+    $("lobbyStatus").textContent="Could not restore the Supabase session. Reopen the hosted game from the same browser.";
+    log("[error] "+e.message);render();
+  }
+}
+window.addEventListener("load",()=>{boot()});
+</script></body></html>
