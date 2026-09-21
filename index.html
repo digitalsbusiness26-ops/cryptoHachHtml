@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>QuizHack Arena v15.2 — 10 Question Matches + CSS Attacks</title>
+<title>QuizHack Arena v16 — 10 Question Matches + CSS Attacks</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{--bg:#05091a;--panel:#0b1129;--panel2:#101936;--line:#26345c;--cyan:#62e8ff;--pink:#ff5ccf;--green:#65f0a7;--yellow:#ffd76a;--text:#eef4ff;--muted:#8490b0;--danger:#ff6b8a}*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,Segoe UI,Arial,sans-serif;background:radial-gradient(circle at 20% 15%,#15245a 0,transparent 28%),radial-gradient(circle at 75% 30%,#27134c 0,transparent 25%),#05091a;color:var(--text);min-height:100vh}button,input{font:inherit}button{cursor:pointer}.app{display:grid;grid-template-columns:82px 1fr;min-height:100vh}.sidebar{border-right:1px solid #182447;background:#070d20;display:flex;flex-direction:column;align-items:center;padding:16px 8px;gap:10px}.logo{width:48px;height:48px;border:1px solid #2b477b;border-radius:14px;display:grid;place-items:center;color:var(--cyan);font-weight:900;box-shadow:0 0 22px #1be2ff22;margin-bottom:16px}.nav{width:100%;padding:11px 4px;border-radius:12px;border:1px solid transparent;background:transparent;color:var(--muted);font-size:11px}.nav span{display:block;font-size:20px;margin-bottom:5px}.nav.active,.nav:hover{color:var(--text);border-color:#315080;background:#102044}.main{padding:22px 26px;max-width:1500px;width:100%;margin:auto}.top{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:22px}.brand h1{font-size:25px;margin:0}.brand small,.profile small{color:var(--muted)}.profile{display:flex;align-items:center;gap:12px}.avatar{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#1e4777,#9e45bc);border:2px solid #6ae7ff}.profile strong{display:block}.page{display:none}.page.active{display:block}.grid{display:grid;grid-template-columns:1.35fr .85fr;gap:18px}.card{background:linear-gradient(180deg,#0d1530e8,#080f25e8);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 14px 45px #0005}.hero{min-height:245px;position:relative;overflow:hidden;background:radial-gradient(circle at 30% 60%,#1a478e55 0 3%,transparent 18%),radial-gradient(circle at 70% 35%,#a835a744 0 3%,transparent 20%),linear-gradient(135deg,#0d1839,#080c20)}.hero:after{content:"";position:absolute;inset:-30%;background:repeating-radial-gradient(ellipse at center,transparent 0 45px,#31538a25 46px 47px);transform:rotate(-8deg)}.hero>*{position:relative;z-index:1}.eyebrow{color:var(--cyan);font-size:12px;letter-spacing:1.8px;text-transform:uppercase}.hero h2{font-size:32px;margin:8px 0}.hero p{max-width:620px;color:#b8c3df}.actions{display:flex;gap:10px;flex-wrap:wrap}.btn{border:1px solid #3d5687;background:#111e3f;color:var(--text);padding:10px 15px;border-radius:10px}.btn.primary{background:linear-gradient(90deg,#1c9fca,#8a4bd1);border:0}.btn.pink{background:#7d245e;border-color:#bd438f}.btn:disabled{opacity:.45;cursor:not-allowed}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px}.stat{background:#0b1430;border:1px solid #24385f;border-radius:12px;padding:13px}.stat b{font-size:22px}.stat small{display:block;color:var(--muted);margin-top:4px}.section-title{display:flex;justify-content:space-between;align-items:center;margin:22px 0 10px}.section-title h3{margin:0}.muted{color:var(--muted)}.market{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.coin{padding:13px;border:1px solid #26375e;border-radius:12px;background:#0a132b}.coin b{font-size:18px}.up{color:var(--green)}.down{color:var(--danger)}.list{display:grid;gap:9px}.row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px;border:1px solid #233457;background:#09122a;border-radius:11px}.question{font-size:25px;line-height:1.35;margin:14px 0 20px}.answers{display:grid;grid-template-columns:1fr 1fr;gap:12px}.answer{text-align:left;padding:16px;border:1px solid #2d416b;border-radius:12px;background:#0a1430;color:var(--text)}.answer:hover{border-color:var(--cyan);transform:translateY(-1px)}.answer.correct{border-color:var(--green);background:#0b3328}.answer.wrong{border-color:var(--danger);background:#351329}.feedback{min-height:44px;margin-top:14px;padding:12px;border-radius:10px;background:#09132b;color:#b9c5df}.hack-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.target{border:1px solid #30436e;border-radius:13px;padding:14px;background:#0a132b}.target.selected{border-color:var(--pink);box-shadow:0 0 20px #ff5ccf20}.shield{height:8px;background:#1d2947;border-radius:99px;overflow:hidden;margin:8px 0}.shield i{display:block;height:100%;background:linear-gradient(90deg,var(--cyan),var(--pink))}.packet{border:1px dashed #79568d;padding:15px;border-radius:12px;background:#170f29;margin-top:12px}.terminal{background:#03060e;border:1px solid #203251;border-radius:12px;padding:14px;color:#7df7bd;font:12px ui-monospace,monospace;min-height:145px;white-space:pre-wrap}.shop{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.table{width:100%;border-collapse:collapse}.table th,.table td{text-align:left;padding:12px;border-bottom:1px solid #203050}.table th{color:var(--muted);font-size:12px;text-transform:uppercase}.badge{display:inline-block;padding:4px 8px;border-radius:999px;background:#172648;color:var(--cyan);font-size:11px}.toast{position:fixed;right:22px;bottom:22px;background:#101d3c;border:1px solid #3b5a8e;padding:13px 16px;border-radius:11px;display:none;box-shadow:0 15px 40px #0008}input{background:#071127;color:var(--text);border:1px solid #2b416e;border-radius:9px;padding:10px;width:100%}@media(max-width:900px){.grid,.hack-grid{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.shop{grid-template-columns:1fr 1fr}}@media(max-width:650px){.app{grid-template-columns:1fr}.sidebar{position:sticky;top:0;z-index:10;flex-direction:row;overflow:auto;border-right:0;border-bottom:1px solid #182447}.logo{margin:0}.nav{min-width:68px}.main{padding:16px}.answers{grid-template-columns:1fr}.market{grid-template-columns:1fr}}
@@ -14,7 +14,18 @@
 
 <section id="multiplayer" class="page active"><div class="grid"><div class="card hero"><div class="eyebrow">REAL-TIME MULTIPLAYER</div><h2>Enter the Cyber Quiz Arena.</h2><p>Create or join a room for 2–7 students. A match can start with only 2 players; Supabase synchronizes questions, XP, firewall, attacks, defenses, and match results.</p><div class="actions"><button class="btn primary" onclick="createRoom()">Create Room</button><button class="btn" onclick="joinRoom()">Join Room</button><button class="btn pink" onclick="quickMatch()">Quick Match</button></div><div class="section-title"><h3>Player</h3></div><input id="nameInput" maxlength="18" placeholder="Enter your player name"><div class="section-title"><h3>Room Code</h3><span id="connectionBadge" class="badge">CONNECTING</span></div><input id="roomInput" maxlength="8" placeholder="e.g. ABC123"></div><div class="card"><div class="section-title"><h3>Matchmaking</h3><span id="roomBadge" class="badge">NO ROOM</span></div><div id="lobbyStatus" class="feedback">Connecting to Supabase…</div><div class="list" id="lobbyPlayers"></div><div class="actions" style="margin-top:14px"><button class="btn primary" id="readyBtn" onclick="toggleReady()" disabled>I'm Ready</button><button class="btn" onclick="leaveRoom()">Leave Room</button></div><p class="muted">Rooms support up to 7 players and can start with 2. The game-only “hacking” mechanic changes firewall stats; it does not attack real computers.</p></div></div></section>
 
-<section id="match" class="page"><div class="card"><div class="section-title"><div><span class="eyebrow">LIVE MATCH</span><h2 id="matchTitle">Waiting for opponent…</h2></div><span class="badge">LIVE</span></div><div class="stats" id="matchStats"></div><div id="matchAlert" class="feedback">Multiplayer uses 10 questions drawn from the embedded 100-question HTML curriculum bank.</div></div><div class="grid" style="margin-top:18px"><div class="card"><div class="eyebrow">HTML BATTLE</div><div class="muted">HTML Match Question <span id="mQNum">—</span> of 10</div><div class="question" id="mQuestion">Waiting for the match to start…</div><div class="answers" id="mAnswers"></div><div class="feedback" id="mFeedback">Your answer is sent to Supabase.</div></div><div class="card"><div class="section-title"><h3>⚡ Glitch Attack</h3><span id="tokenBadge" class="badge">NO TOKEN</span></div><p class="muted">Each match uses 10 HTML questions drawn from the larger curriculum bank. A wrong HTML answer gives you one Glitch Token. CSS defense questions are separate and do not count toward the 10.</p><div class="section-title"><h3>Choose CSS Attack</h3><span id="attackCostBadge" class="badge">1 TOKEN</span></div><select id="cssAttackType" onchange="selectCssAttack(this.value)" style="width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:#09111f;color:var(--text);font:inherit"><option value="style_glitch">🎨 Style Glitch — 1 token</option><option value="box_model_breach">📦 Box Model Breach — 1 token</option><option value="flexbox_hijack">📐 Flexbox Hijack — 2 tokens</option><option value="grid_breaker">🧱 Grid Breaker — 2 tokens</option><option value="display_cloak">👻 Display Cloak — 2 tokens</option><option value="responsive_attack">📱 Responsive Attack — 2 tokens</option><option value="css_boss_attack">🔥 CSS Boss Attack — 3 tokens</option></select><p class="muted" id="attackDescription">Identify the correct CSS property/value.</p><div class="section-title"><h3>Choose Target</h3><span id="targetCountBadge" class="badge">0 TARGETS</span></div><select id="glitchTarget" onchange="selectGlitchTarget(this.value)" style="width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:#09111f;color:var(--text);font:inherit"><option value="">No target available</option></select><div class="packet" style="margin-top:12px"><b>Effect:</b> selected player's firewall −8<br><span class="muted">Defense: solve the selected CSS challenge before the 15-second server deadline.</span></div><button class="btn pink" id="attackBtn" onclick="sendAttack()" disabled style="width:100%;margin-top:12px">Send Glitch Packet</button><div class="section-title"><h3>Defense</h3><span id="defenseBadge" class="badge">NONE</span></div><div id="defenseChallenge" class="target"><b>No incoming packet.</b><p class="muted">When your opponent attacks, the defense challenge appears here.</p></div><div class="terminal" id="liveConsole">[client] Starting Supabase multiplayer…</div></div></div></section>
+<section id="match" class="page"><div class="card"><div class="section-title"><div><span class="eyebrow">LIVE MATCH</span><h2 id="matchTitle">Waiting for opponent…</h2></div><span class="badge">LIVE</span></div><div class="stats" id="matchStats"></div><div id="matchAlert" class="feedback">Multiplayer uses 10 questions drawn from the embedded 100-question HTML curriculum bank.</div></div><div class="grid" style="margin-top:18px"><div class="card"><div class="eyebrow">HTML BATTLE</div><div class="muted">HTML Match Question <span id="mQNum">—</span> of 10</div><div class="question" id="mQuestion">Waiting for the match to start…</div><div class="answers" id="mAnswers"></div><div class="feedback" id="mFeedback">Your answer is sent to Supabase.</div></div><div class="card"><div class="section-title"><h3>⚡ Glitch Attack</h3><span id="tokenBadge" class="badge">NO TOKEN</span></div><p class="muted">Each match uses 10 HTML questions drawn from the larger curriculum bank. A wrong HTML answer gives you one Glitch Token. CSS defense questions are separate and do not count toward the 10.</p><div class="section-title"><h3>Choose CSS Attack</h3><span id="attackCostBadge" class="badge">1 TOKEN</span></div><select id="cssAttackType" onchange="selectCssAttack(this.value)" style="width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:#09111f;color:var(--text);font:inherit"><option value="style_glitch">🎨 Style Glitch — 1 token</option><option value="box_model_breach">📦 Box Model Breach — 1 token</option><option value="flexbox_hijack">📐 Flexbox Hijack — 2 tokens</option><option value="grid_breaker">🧱 Grid Breaker — 2 tokens</option><option value="display_cloak">👻 Display Cloak — 2 tokens</option><option value="responsive_attack">📱 Responsive Attack — 2 tokens</option><option value="css_boss_attack">🔥 CSS Boss Attack — 3 tokens</option></select><p class="muted" id="attackDescription">Identify the correct CSS property/value.</p><div class="section-title"><h3>Choose Target</h3><span id="targetCountBadge" class="badge">0 TARGETS</span></div><select id="glitchTarget" onchange="selectGlitchTarget(this.value)" style="width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:#09111f;color:var(--text);font:inherit"><option value="">No target available</option></select><div class="packet" style="margin-top:12px"><b>Effect:</b> selected player's firewall −8<br><span class="muted">Defense: solve the selected CSS challenge before the 15-second server deadline.</span></div><button class="btn pink" id="attackBtn" onclick="sendAttack()" disabled style="width:100%;margin-top:12px">Send Glitch Packet</button><div class="section-title"><h3>Defense</h3><span id="defenseBadge" class="badge">NONE</span></div><div id="defenseChallenge" class="target"><b>No incoming packet.</b><p class="muted">When your opponent attacks, the defense challenge appears here.</p></div><div class="terminal" id="liveConsole">[client] Starting Supabase multiplayer…</div></div></div><div id="matchResults" class="card" style="display:none;margin-top:18px">
+  <div class="section-title"><div><span class="eyebrow">MATCH COMPLETE</span><h2>🏆 Final Podium</h2></div><span class="badge">RESULTS</span></div>
+  <p class="muted">Everyone completed all 10 HTML questions. Here are the best scores from this match.</p>
+  <div id="podium" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-items:end;margin:22px 0"></div>
+  <div id="finalStandings" class="list"></div>
+  <div class="actions" style="margin-top:18px;flex-wrap:wrap">
+    <button class="btn primary" id="continueMatchBtn" onclick="continuePlaying()">Continue Playing</button>
+    <button class="btn" onclick="returnToQuizArena()">Go Back to Quiz Arena</button>
+    <button class="btn" onclick="leaveRoom()">Leave Game</button>
+  </div>
+  <div id="rematchStatus" class="feedback" style="margin-top:12px">Choose Continue Playing to stay with these opponents for another 10-question match.</div>
+</div></section>
 
 <section id="home" class="page"><div class="grid"><div class="card hero"><div class="eyebrow">Educational cyber game</div><h2>Turn knowledge into a digital battle.</h2><p>Answer HTML questions to earn XP and fictional XEO coins. Wrong answers can become harmless game-only glitch packets.</p><div class="actions"><button class="btn primary" onclick="showPage('quiz')">Start Quiz</button><button class="btn pink" onclick="showPage('hack')">Enter Hack Arena</button></div><div class="stats"><div class="stat"><b id="coins">1250</b><small>XEO Balance</small></div><div class="stat"><b id="streak">5</b><small>Day Streak</small></div><div class="stat"><b id="level">4</b><small>Level</small></div><div class="stat"><b id="shield">82</b><small>Firewall %</small></div></div></div><div class="card"><div class="section-title"><h3>Live-looking Market</h3><span class="badge">FICTIONAL</span></div><div class="market"><div class="coin"><small>XEO</small><br><b>$12.48</b><br><span class="up">+4.8%</span></div><div class="coin"><small>BYTE</small><br><b>$3.21</b><br><span class="up">+1.9%</span></div><div class="coin"><small>GLCH</small><br><b>$0.84</b><br><span class="down">-2.2%</span></div></div></div></div></section>
 
@@ -39,6 +50,7 @@ if(!Array.isArray(state.history))state.history=[];
 let qi=Math.floor(Math.random()*Q.length),answered=false,timer=null,roomCode=null,roomId=null,meId=null,ready=false,channel=null,roomPlayers=[],room=null,token=false,currentPacket=null,currentPage="multiplayer",selectedTargetId=null,selectedAttackType="style_glitch";
 window.matchQuestionSet=[];
 window.matchQuestionIndex=0;
+window.qhaLoadedRound=null;
 window.defenseTimer=null;
 window.defenseExpiring=false;
 function saveActiveMatch(){if(roomId&&roomCode)localStorage.setItem(MATCH_KEY,JSON.stringify({roomId,roomCode}));}
@@ -95,13 +107,24 @@ async function syncProfile(){
   return p;
 }
 
+function qhaHash(str){
+  let h=2166136261;
+  for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619)}
+  return h>>>0;
+}
+function qhaRng(seed){
+  return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return ((t^t>>>14)>>>0)/4294967296}
+}
+function qhaShuffle(arr,rng){
+  const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a;
+}
 function buildMatchQuestionSet(){
-  const shuffled=[...Q].sort(()=>Math.random()-.5);
+  const seed=qhaHash(`${roomId||"room"}:${room?.round_number||1}:${meId||"player"}`);
+  const rng=qhaRng(seed),shuffled=qhaShuffle(Q,rng);
   const easy=shuffled.filter(q=>q.difficulty==="easy").slice(0,4);
-  const medium=shuffled.filter(q=>q.difficulty==="medium"&&!easy.includes(q)).slice(0,4);
-  const hard=shuffled.filter(q=>q.difficulty==="hard"&&!easy.includes(q)&&!medium.includes(q)).slice(0,2);
-  window.matchQuestionSet=[...easy,...medium,...hard].sort(()=>Math.random()-.5);
-  window.matchQuestionIndex=0;
+  const medium=shuffled.filter(q=>q.difficulty==="medium").slice(0,4);
+  const hard=shuffled.filter(q=>q.difficulty==="hard").slice(0,2);
+  window.matchQuestionSet=qhaShuffle([...easy,...medium,...hard],rng);
 }
 function currentMatchQuestion(){
   if(!window.matchQuestionSet.length)buildMatchQuestionSet();
@@ -135,24 +158,77 @@ async function createRoom(){try{await connect();const n=await name();const r=awa
 async function joinRoom(){try{await connect();const code=($("roomInput").value||"").trim().toUpperCase();if(!code)return toast("Enter a room code first.");const n=await name();const r=await sb.rpc("join_game_room",{p_room_code:code,p_name:n});if(r.error)throw r.error;await enterRoom(code)}catch(e){toast(e.message);log("[error] "+e.message)}}
 async function quickMatch(){try{await connect();const n=await name();const r=await sb.rpc("quick_match",{p_name:n});if(r.error)throw r.error;const x=first(r.data),code=x.room_code||x.code||x.room;if(code)await enterRoom(code);else toast("Waiting for another student…")}catch(e){toast(e.message);log("[error] "+e.message)}}
 async function enterRoom(code){if(!code)return;roomCode=code;const rr=await sb.from("game_rooms").select("id,room_code").eq("room_code",code).single();if(rr.error){toast(rr.error.message);log("[error] "+rr.error.message);return}roomId=rr.data.id;saveActiveMatch();$("roomInput").value=code;$("roomBadge").textContent=code;$("readyBtn").disabled=false;await refreshRoom();subscribe();await loadRoom();showPage(room&&["playing","finished"].includes(room.status)?"match":"multiplayer");toast("Room "+code)}
-async function refreshRoom(){if(!roomId)return;const r=await sb.from("game_players").select("*").eq("room_id",roomId);if(r.error){log("[error] "+r.error.message);return}roomPlayers=r.data||[];meId=(await sb.auth.getUser()).data.user?.id;const me=roomPlayers.find(p=>p.id===meId);if(me){state.xp=Math.max(state.xp||0,me.xp||0);state.coins=Math.max(state.coins||0,me.coins||0);state.level=Math.max(state.level||1,me.level||1);localStorage.setItem(KEY,JSON.stringify(state));render();await syncProfile()}ready=!!me?.ready;$("readyBtn").textContent=ready?"Ready ✓":"I'm Ready";renderLobby();renderLeaderboard();renderTargets();$("lobbyStatus").textContent=roomPlayers.length>=2?`${roomPlayers.length}/7 players connected. The match can start now when all current players are ready.`:`${roomPlayers.length}/7 players connected. Waiting for at least one more student…`;if(roomPlayers.length>=2&&roomPlayers.every(p=>p.ready))await loadRoom();if(room&&["playing","finished"].includes(room.status)){renderMatch();if(currentPage==="multiplayer")showPage("match")}}
+async function refreshRoom(){if(!roomId)return;const r=await sb.from("game_players").select("*").eq("room_id",roomId);if(r.error){log("[error] "+r.error.message);return}roomPlayers=r.data||[];meId=(await sb.auth.getUser()).data.user?.id;const me=roomPlayers.find(p=>p.id===meId);if(me){window.matchQuestionIndex=Math.min(10,me.match_questions_answered||0);state.xp=Math.max(state.xp||0,me.xp||0);state.coins=Math.max(state.coins||0,me.coins||0);state.level=Math.max(state.level||1,me.level||1);localStorage.setItem(KEY,JSON.stringify(state));render();await syncProfile()}ready=!!me?.ready;$("readyBtn").textContent=ready?"Ready ✓":"I'm Ready";renderLobby();renderLeaderboard();renderTargets();$("lobbyStatus").textContent=roomPlayers.length>=2?`${roomPlayers.length}/7 players connected. The match can start now when all current players are ready.`:`${roomPlayers.length}/7 players connected. Waiting for at least one more student…`;if(roomPlayers.length>=2&&roomPlayers.every(p=>p.ready))await loadRoom();if(room&&["playing","finished"].includes(room.status)){renderMatch();if(currentPage==="multiplayer")showPage("match")}}
 function renderLobby(){$("lobbyPlayers").innerHTML=roomPlayers.map((p,i)=>`<div class="row"><span>🧑‍💻 <b>${esc(p.name)}</b> <small class="muted">Player ${i+1}/7</small></span><span class="badge">${p.ready?"READY":"WAITING"}</span></div>`).join("")}
 function subscribe(){if(channel)sb.removeChannel(channel);channel=sb.channel("qha-"+roomId).on("postgres_changes",{event:"*",schema:"public",table:"game_players",filter:"room_id=eq."+roomId},refreshRoom).on("postgres_changes",{event:"*",schema:"public",table:"game_rooms",filter:"id=eq."+roomId},loadRoom).on("postgres_changes",{event:"*",schema:"public",table:"game_packets",filter:"room_id=eq."+roomId},refreshPackets).subscribe(status=>log("[realtime] "+status))}
 async function toggleReady(){if(!roomId)return;try{ready=!ready;const r=await sb.rpc("set_ready",{p_room_id:roomId,p_ready:ready});if(r.error){ready=!ready;throw r.error}$("readyBtn").textContent=ready?"Ready ✓":"I'm Ready";await refreshRoom();await loadRoom()}catch(e){toast(e.message);log("[error] "+e.message)}}
 async function leaveRoom(){try{if(roomId){await syncProfile();await sb.rpc("leave_game_room",{p_room_id:roomId})}}catch(e){log("[error] "+e.message)}if(channel)sb.removeChannel(channel);stopDefenseTimer();clearActiveMatch();roomCode=null;roomId=null;roomPlayers=[];room=null;currentPacket=null;selectedTargetId=null;ready=false;window.matchQuestionSet=[];window.matchQuestionIndex=0;$("roomBadge").textContent="NO ROOM";$("readyBtn").disabled=true;$("readyBtn").textContent="I'm Ready";showPage("multiplayer")}
-async function loadRoom(){if(!roomId)return;const r=await sb.from("game_rooms").select("*").eq("id",roomId).maybeSingle();if(r.error){log("[error] "+r.error.message);return}if(!r.data)return;room=r.data;if(room.status==="playing"||room.status==="finished"){renderMatch();await refreshPackets();if(currentPage==="multiplayer")showPage("match")}}
+async function loadRoom(){if(!roomId)return;const r=await sb.from("game_rooms").select("*").eq("id",roomId).maybeSingle();if(r.error){log("[error] "+r.error.message);return}if(!r.data)return;room=r.data;if(window.qhaLoadedRound!==room.round_number){window.qhaLoadedRound=room.round_number;window.matchQuestionSet=[];}if(room.status==="playing"||room.status==="finished"){renderMatch();await refreshPackets();if(currentPage==="multiplayer")showPage("match")}}
 function normalize(q){if(!q)return null;if(typeof q==="string")try{q=JSON.parse(q)}catch(e){return null}if(q.text&&Array.isArray(q.options))return {q:q.text,a:q.options,number:room?.question_number};if(q.q&&Array.isArray(q.a))return q;return null}
 function renderMatch(){
   const me=roomPlayers.find(p=>p.id===meId),others=roomPlayers.filter(p=>p.id!==meId);
-  $("matchTitle").textContent=roomPlayers.length>=2?`${roomPlayers.length}-Player Cyber Battle`:"Live Match";
-  $("matchStats").innerHTML=roomPlayers.map(p=>`<div class="stat"><b>${esc(p.name)}${p.id===meId?' (You)':''}</b><small>Lv ${p.level||1} • ${p.xp||0} XP • ${p.coins||0} XEO • Firewall ${p.shield??100}% • ${p.tokens||0} Token${(p.tokens||0)===1?'':'s'}</small></div>`).join("");
-  const q=currentMatchQuestion();if(q){$("mQNum").textContent=Math.min(window.matchQuestionIndex+1,10);$("mQuestion").textContent=q.q;$("mAnswers").innerHTML=q.a.map((a,i)=>`<button class="answer" onclick="submitAnswer(${i})">${esc(a)}</button>`).join("")}else{$("mQuestion").textContent="You completed your 10 HTML match questions.";$("mAnswers").innerHTML=""}
-  const tokenCount=me?.tokens??(token?1:0); token=tokenCount>0;
+  const finished=room?.status==="finished";
+  $("matchTitle").textContent=finished?"Match Complete":(roomPlayers.length>=2?`${roomPlayers.length}-Player Cyber Battle`:"Live Match");
+  $("matchStats").innerHTML=roomPlayers.map(p=>`<div class="stat"><b>${esc(p.name)}${p.id===meId?' (You)':''}</b><small>Score ${p.score||0}/10 • Lv ${p.level||1} • ${p.xp||0} XP • ${p.coins||0} XEO • Firewall ${p.shield??100}%</small></div>`).join("");
+
+  if(finished){
+    $("mQuestion").textContent="All players completed their 10 HTML questions.";
+    $("mAnswers").innerHTML="";
+    $("mFeedback").textContent="Final results are ready below.";
+    $("matchResults").style.display="block";
+    renderPodium();
+  }else{
+    $("matchResults").style.display="none";
+    const answered=me?.match_questions_answered??window.matchQuestionIndex;
+    window.matchQuestionIndex=Math.max(0,Math.min(10,answered||0));
+    const q=currentMatchQuestion();
+    if(q){
+      $("mQNum").textContent=window.matchQuestionIndex+1;
+      $("mQuestion").textContent=q.q;
+      $("mAnswers").innerHTML=q.a.map((a,i)=>`<button class="answer" onclick="submitAnswer(${i})">${esc(a)}</button>`).join("");
+      $("mFeedback").textContent="10-question HTML match drawn from the 100-question curriculum bank — CSS defenses do not count toward the 10 questions.";
+    }else{
+      $("mQNum").textContent="10";
+      $("mQuestion").textContent="You completed your 10 HTML questions. Waiting for the other players to finish…";
+      $("mAnswers").innerHTML="";
+      $("mFeedback").textContent="Stay here while the remaining players finish. The podium will appear automatically when everyone completes all 10.";
+    }
+  }
+
+  const tokenCount=me?.tokens??(token?1:0);token=tokenCount>0;
   renderTargetPicker();
   $("tokenBadge").textContent=tokenCount?`${tokenCount} TOKEN${tokenCount===1?'':'S'}`:"NO TOKEN";
-  renderAttackChoice();const attack=CSS_ATTACKS[selectedAttackType]||CSS_ATTACKS.style_glitch;$("attackBtn").disabled=tokenCount<attack.cost||!selectedTargetId||others.length===0||room?.status==="finished";
+  renderAttackChoice();
+  const attack=CSS_ATTACKS[selectedAttackType]||CSS_ATTACKS.style_glitch;
+  $("attackBtn").disabled=finished||tokenCount<attack.cost||!selectedTargetId||others.length===0;
   $("attackBtn").textContent=selectedTargetId?`${attack.name} → ${(others.find(p=>p.id===selectedTargetId)||{}).name||"Target"}`:`Send ${attack.name}`;
-  $("mFeedback").textContent=room?.status==="finished"?"Match finished.":"10-question HTML match drawn from a 100-question curriculum bank — CSS defenses do not count toward the 10 questions.";
+}
+function renderPodium(){
+  const ranked=[...roomPlayers].sort((a,b)=>(b.score||0)-(a.score||0)||(b.shield||0)-(a.shield||0)||(a.name||"").localeCompare(b.name||""));
+  const medals=["🥇","🥈","🥉"],labels=["1st Place","2nd Place","3rd Place"];
+  $("podium").innerHTML=[0,1,2].map(i=>{
+    const p=ranked[i];
+    if(!p)return `<div class="stat" style="min-height:${110-i*15}px"><b>${medals[i]} ${labels[i]}</b><small>—</small></div>`;
+    return `<div class="stat" style="min-height:${150-i*20}px;display:flex;flex-direction:column;justify-content:center;text-align:center"><b style="font-size:1.5rem">${medals[i]}</b><b>${esc(p.name)}</b><small>${labels[i]} • ${p.score||0}/10 correct</small></div>`;
+  }).join("");
+  $("finalStandings").innerHTML=ranked.map((p,i)=>`<div class="row"><span><b>#${i+1} ${esc(p.name)}</b>${p.id===meId?' <span class="muted">(You)</span>':''}</span><span class="badge">${p.score||0}/10</span></div>`).join("");
+  const me=ranked.find(p=>p.id===meId);
+  const waiting=roomPlayers.filter(p=>p.rematch_ready).length;
+  $("rematchStatus").textContent=me?.rematch_ready?`Ready for another match — waiting for the other players (${waiting}/${roomPlayers.length}).`:"Choose Continue Playing to stay with these opponents for another 10-question match.";
+  $("continueMatchBtn").disabled=!!me?.rematch_ready;
+  $("continueMatchBtn").textContent=me?.rematch_ready?"Waiting for Players…":"Continue Playing";
+}
+async function continuePlaying(){
+  if(!roomId||room?.status!=="finished")return;
+  const r=await sb.rpc("continue_game_room",{p_room_id:roomId});
+  if(r.error)return toast(r.error.message);
+  toast(r.data?.started?"New match starting!":"Waiting for the other players…");
+  await refreshRoom();await loadRoom();
+}
+async function returnToQuizArena(){
+  await leaveRoom();
+  showPage("multiplayer");
+  toast("Back in Quiz Arena — create, join, or quick-match with different opponents.");
 }
 async function submitAnswer(i){
   if(!roomId||room?.status!=="playing")return;
@@ -167,12 +243,11 @@ async function submitAnswer(i){
     $("mFeedback").textContent="✕ Wrong answer. Glitch Token earned. "+(q.e||"");
     toast("Glitch Token earned!");
   }
-  window.matchQuestionIndex++;
-  if(window.matchQuestionIndex>=10){
-    $("mFeedback").textContent+=" You completed all 10 HTML questions for this match.";
-    toast("10 HTML match questions complete!");
-  }
-  await refreshRoom();await syncProfile();await loadLeaderboard();renderMatch();
+  await refreshRoom();await loadRoom();await syncProfile();await loadLeaderboard();
+  const me=roomPlayers.find(p=>p.id===meId);
+  window.matchQuestionIndex=Math.min(10,me?.match_questions_answered||0);
+  if(window.matchQuestionIndex>=10&&room?.status!=="finished")toast("10 questions complete — waiting for the other players.");
+  renderMatch();
 }
 async function sendAttack(){if(!roomId)return;const me=roomPlayers.find(p=>p.id===meId);const attack=CSS_ATTACKS[selectedAttackType]||CSS_ATTACKS.style_glitch;if((me?.tokens||0)<attack.cost)return toast(`You need ${attack.cost} Glitch Token${attack.cost===1?"":"s"}.`);if(!selectedTargetId)return toast("Choose a player to target first.");const target=roomPlayers.find(p=>p.id===selectedTargetId);if(!target||target.id===meId)return toast("Choose another player.");const r=await sb.rpc("send_glitch",{p_room_id:roomId,p_target_id:selectedTargetId,p_packet_type:selectedAttackType});if(r.error)return toast(r.error.message);$("packetState").textContent="SENT";toast(`${attack.name} sent to ${target.name}!`);await refreshRoom();await refreshPackets()}
 async function refreshPackets(){if(!roomId)return;const r=await sb.from("game_packets").select("*").eq("room_id",roomId).order("created_at",{ascending:false});if(r.error){log("[error] "+r.error.message);return}const previousId=currentPacket?.id||null;const p=(r.data||[]).find(x=>x.target_id===meId&&x.answered===false);currentPacket=p||null;if(currentPacket&&currentPacket.defense_expires_at&&new Date(currentPacket.defense_expires_at).getTime()<=Date.now()){await expireDefense();return}if(currentPacket&&currentPacket.id!==previousId){toast("⚠️ Incoming Glitch Packet!");log("[alert] Incoming glitch packet. Firewall damage: -"+(currentPacket.damage??8));$("matchAlert").textContent="⚠️ GLITCH ATTACK! Your firewall was hit. Complete the defense challenge.";if(currentPage==="match")renderDefense()}else if(!currentPacket&&previousId){$("matchAlert").textContent="Defense resolved. Match continues."}renderDefense()}
