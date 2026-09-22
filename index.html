@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>QuizHack Arena v16.7 — 10 Question Matches + CSS Attacks</title>
+<title>QuizHack Arena v16.8 — 10 Question Matches + CSS Attacks</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{--bg:#05091a;--panel:#0b1129;--panel2:#101936;--line:#26345c;--cyan:#62e8ff;--pink:#ff5ccf;--green:#65f0a7;--yellow:#ffd76a;--text:#eef4ff;--muted:#8490b0;--danger:#ff6b8a}*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,Segoe UI,Arial,sans-serif;background:radial-gradient(circle at 20% 15%,#15245a 0,transparent 28%),radial-gradient(circle at 75% 30%,#27134c 0,transparent 25%),#05091a;color:var(--text);min-height:100vh}button,input{font:inherit}button{cursor:pointer}.app{display:grid;grid-template-columns:82px 1fr;min-height:100vh}.sidebar{border-right:1px solid #182447;background:#070d20;display:flex;flex-direction:column;align-items:center;padding:16px 8px;gap:10px}.logo{width:48px;height:48px;border:1px solid #2b477b;border-radius:14px;display:grid;place-items:center;color:var(--cyan);font-weight:900;box-shadow:0 0 22px #1be2ff22;margin-bottom:16px}.nav{width:100%;padding:11px 4px;border-radius:12px;border:1px solid transparent;background:transparent;color:var(--muted);font-size:11px}.nav span{display:block;font-size:20px;margin-bottom:5px}.nav.active,.nav:hover{color:var(--text);border-color:#315080;background:#102044}.main{padding:22px 26px;max-width:1500px;width:100%;margin:auto}.top{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:22px}.brand h1{font-size:25px;margin:0}.brand small,.profile small{color:var(--muted)}.profile{display:flex;align-items:center;gap:12px}.avatar{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#1e4777,#9e45bc);border:2px solid #6ae7ff}.profile strong{display:block}.page{display:none}.page.active{display:block}.grid{display:grid;grid-template-columns:1.35fr .85fr;gap:18px}.card{background:linear-gradient(180deg,#0d1530e8,#080f25e8);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 14px 45px #0005}.hero{min-height:245px;position:relative;overflow:hidden;background:radial-gradient(circle at 30% 60%,#1a478e55 0 3%,transparent 18%),radial-gradient(circle at 70% 35%,#a835a744 0 3%,transparent 20%),linear-gradient(135deg,#0d1839,#080c20)}.hero:after{content:"";position:absolute;inset:-30%;background:repeating-radial-gradient(ellipse at center,transparent 0 45px,#31538a25 46px 47px);transform:rotate(-8deg)}.hero>*{position:relative;z-index:1}.eyebrow{color:var(--cyan);font-size:12px;letter-spacing:1.8px;text-transform:uppercase}.hero h2{font-size:32px;margin:8px 0}.hero p{max-width:620px;color:#b8c3df}.actions{display:flex;gap:10px;flex-wrap:wrap}.btn{border:1px solid #3d5687;background:#111e3f;color:var(--text);padding:10px 15px;border-radius:10px}.btn.primary{background:linear-gradient(90deg,#1c9fca,#8a4bd1);border:0}.btn.pink{background:#7d245e;border-color:#bd438f}.btn:disabled{opacity:.45;cursor:not-allowed}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px}.stat{background:#0b1430;border:1px solid #24385f;border-radius:12px;padding:13px}.stat b{font-size:22px}.stat small{display:block;color:var(--muted);margin-top:4px}.section-title{display:flex;justify-content:space-between;align-items:center;margin:22px 0 10px}.section-title h3{margin:0}.muted{color:var(--muted)}.market{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.coin{padding:13px;border:1px solid #26375e;border-radius:12px;background:#0a132b}.coin b{font-size:18px}.up{color:var(--green)}.down{color:var(--danger)}.list{display:grid;gap:9px}.row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px;border:1px solid #233457;background:#09122a;border-radius:11px}.question{font-size:25px;line-height:1.35;margin:14px 0 20px}.answers{display:grid;grid-template-columns:1fr 1fr;gap:12px}.answer{text-align:left;padding:16px;border:1px solid #2d416b;border-radius:12px;background:#0a1430;color:var(--text)}.answer:hover{border-color:var(--cyan);transform:translateY(-1px)}.answer.correct{border-color:var(--green);background:#0b3328}.answer.wrong{border-color:var(--danger);background:#351329}.feedback{min-height:44px;margin-top:14px;padding:12px;border-radius:10px;background:#09132b;color:#b9c5df}.hack-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.target{border:1px solid #30436e;border-radius:13px;padding:14px;background:#0a132b}.target.selected{border-color:var(--pink);box-shadow:0 0 20px #ff5ccf20}.shield{height:8px;background:#1d2947;border-radius:99px;overflow:hidden;margin:8px 0}.shield i{display:block;height:100%;background:linear-gradient(90deg,var(--cyan),var(--pink))}.packet{border:1px dashed #79568d;padding:15px;border-radius:12px;background:#170f29;margin-top:12px}.terminal{background:#03060e;border:1px solid #203251;border-radius:12px;padding:14px;color:#7df7bd;font:12px ui-monospace,monospace;min-height:145px;white-space:pre-wrap}.shop{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.table{width:100%;border-collapse:collapse}.table th,.table td{text-align:left;padding:12px;border-bottom:1px solid #203050}.table th{color:var(--muted);font-size:12px;text-transform:uppercase}.badge{display:inline-block;padding:4px 8px;border-radius:999px;background:#172648;color:var(--cyan);font-size:11px}.toast{position:fixed;right:22px;bottom:22px;background:#101d3c;border:1px solid #3b5a8e;padding:13px 16px;border-radius:11px;display:none;box-shadow:0 15px 40px #0008}input{background:#071127;color:var(--text);border:1px solid #2b416e;border-radius:9px;padding:10px;width:100%}@media(max-width:900px){.grid,.hack-grid{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.shop{grid-template-columns:1fr 1fr}}@media(max-width:650px){.app{grid-template-columns:1fr}.sidebar{position:sticky;top:0;z-index:10;flex-direction:row;overflow:auto;border-right:0;border-bottom:1px solid #182447}.logo{margin:0}.nav{min-width:68px}.main{padding:16px}.answers{grid-template-columns:1fr}.market{grid-template-columns:1fr}}
@@ -205,7 +205,34 @@ function first(d){return Array.isArray(d)?(d[0]||{}):(d||{})}
 async function createRoom(){try{await connect();const n=await name();const r=await sb.rpc("create_game_room",{p_name:n});if(r.error)throw r.error;const x=first(r.data);const code=x.room_code||x.code||x.room;await enterRoom(code)}catch(e){toast(e.message);log("[error] "+e.message)}}
 async function joinRoom(){try{await connect();const code=($("roomInput").value||"").trim().toUpperCase();if(!code)return toast("Enter a room code first.");const n=await name();const r=await sb.rpc("join_game_room",{p_room_code:code,p_name:n});if(r.error)throw r.error;await enterRoom(code)}catch(e){toast(e.message);log("[error] "+e.message)}}
 async function quickMatch(){try{await connect();const n=await name();const r=await sb.rpc("quick_match",{p_name:n});if(r.error)throw r.error;const x=first(r.data),code=x.room_code||x.code||x.room;if(code)await enterRoom(code);else toast("Waiting for another student…")}catch(e){toast(e.message);log("[error] "+e.message)}}
-async function enterRoom(code){if(!code)return;roomCode=code;const rr=await sb.from("game_rooms").select("id,room_code").eq("room_code",code).single();if(rr.error){toast(rr.error.message);log("[error] "+rr.error.message);return}roomId=rr.data.id;saveActiveMatch();$("roomInput").value=code;$("roomBadge").textContent=code;$("readyBtn").disabled=false;await refreshRoom();subscribe();await loadRoom();showPage(room&&["playing","finished"].includes(room.status)?"match":"multiplayer");toast("Room "+code)}
+async function enterRoom(code){
+  if(!code)return;
+  roomCode=code;
+  const rr=await sb.from("game_rooms").select("id,room_code").eq("room_code",code).single();
+  if(rr.error){toast(rr.error.message);log("[error] "+rr.error.message);return}
+  roomId=rr.data.id;
+  saveActiveMatch();
+  $("roomInput").value=code;
+  $("roomBadge").textContent=code;
+  $("readyBtn").disabled=false;
+
+  // Restore BEFORE refreshRoom. A fresh room row starts at 0 tokens and
+  // refreshRoom calls syncProfile, so the old order could overwrite the
+  // saved profile balance with zero before restoration happened.
+  const restore=await sb.rpc("qha_restore_my_tokens",{p_room_id:roomId});
+  if(restore.error){
+    log("[tokens] restore failed: "+restore.error.message);
+    toast("Token restore failed: "+restore.error.message);
+  }else{
+    log("[tokens] restored "+(restore.data??0)+" saved token(s).");
+  }
+
+  await refreshRoom();
+  subscribe();
+  await loadRoom();
+  showPage(room&&["playing","finished"].includes(room.status)?"match":"multiplayer");
+  toast("Room "+code);
+}
 async function refreshRoom(){if(!roomId)return;const r=await sb.from("game_players").select("*").eq("room_id",roomId);if(r.error){log("[error] "+r.error.message);return}roomPlayers=r.data||[];meId=(await sb.auth.getUser()).data.user?.id;const me=roomPlayers.find(p=>p.id===meId);if(me){window.matchQuestionIndex=Math.min(10,me.match_questions_answered||0);state.xp=Math.max(state.xp||0,me.xp||0);state.coins=Math.max(state.coins||0,me.coins||0);state.level=Math.max(state.level||1,me.level||1);localStorage.setItem(KEY,JSON.stringify(state));render();await syncProfile()}ready=!!me?.ready;$("readyBtn").textContent=ready?"Ready ✓":"I'm Ready";renderLobby();renderLeaderboard();renderTargets();$("lobbyStatus").textContent=roomPlayers.length>=2?`${roomPlayers.length}/7 players connected. The match can start now when all current players are ready.`:`${roomPlayers.length}/7 players connected. Waiting for at least one more student…`;if(roomPlayers.length>=2&&roomPlayers.every(p=>p.ready))await loadRoom();
 if(room&&room.status==="playing"&&roomPlayers.length>=2&&roomPlayers.every(p=>(p.match_questions_answered||0)>=10)){
   const fin=await sb.rpc("finish_curriculum_match",{p_room_id:roomId});
@@ -251,7 +278,12 @@ async function leaveRoom(){
   showPage("multiplayer");
   toast("You left the room.");
 }
-async function loadRoom(){if(!roomId)return;const r=await sb.from("game_rooms").select("*").eq("id",roomId).maybeSingle();if(r.error){log("[error] "+r.error.message);return}if(!r.data)return;room=r.data;if(window.qhaLoadedRound!==room.round_number){window.qhaLoadedRound=room.round_number;window.matchQuestionSet=[];}if(room.status==="playing"||room.status==="finished"){renderMatch();await refreshPackets();if(currentPage==="multiplayer")showPage("match")}}
+async function loadRoom(){if(!roomId)return;const r=await sb.from("game_rooms").select("*").eq("id",roomId).maybeSingle();if(r.error){log("[error] "+r.error.message);return}if(!r.data)return;room=r.data;
+if(room.status==="finished"&&roomId){
+  const saved=await sb.rpc("qha_save_my_tokens",{p_room_id:roomId});
+  if(saved.error)log("[tokens] finish save failed: "+saved.error.message);
+}
+if(window.qhaLoadedRound!==room.round_number){window.qhaLoadedRound=room.round_number;window.matchQuestionSet=[];}if(room.status==="playing"||room.status==="finished"){renderMatch();await refreshPackets();if(currentPage==="multiplayer")showPage("match")}}
 function normalize(q){if(!q)return null;if(typeof q==="string")try{q=JSON.parse(q)}catch(e){return null}if(q.text&&Array.isArray(q.options))return {q:q.text,a:q.options,number:room?.question_number};if(q.q&&Array.isArray(q.a))return q;return null}
 function renderMatch(){
   const me=roomPlayers.find(p=>p.id===meId),others=roomPlayers.filter(p=>p.id!==meId);
